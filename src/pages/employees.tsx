@@ -8,6 +8,7 @@ import { setFromModal } from "../store/booleans";
 export const Employees = () => {
   const dispatch = useDispatch();
   const data = useSelector((state: RootState) => state.employees.employeesArr);
+
   const addEmployees = () => {
     dispatch(setFromModal());
   };
@@ -35,7 +36,7 @@ export const Employees = () => {
           Hodim qo'shish
         </button>
       </div>
-      <section className="flex gap-10 flex-wrap">
+      <section className="flex gap-10 flex-wrap  h-[calc(100vh-200px)] overflow-auto">
         {data.map((item: ObjType) => (
           <Card key={item.id} data={item} />
         ))}

@@ -6,20 +6,25 @@ import { useDispatch } from "react-redux";
 import { Button, Form, Input } from "antd";
 import { ObjType } from "../../lib/types";
 import { useState } from "react";
+import { addData } from "../../store/employees-slice";
 interface Props {
   type?: string;
-  id?: number |undefined;
+  id?: number | undefined;
 }
 export const ModalForm = ({ type, id }: Props) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
-  const onSubmit = (data: ObjType) => {
+  const onSubmit = async (dataInfo: ObjType) => {
     try {
       setLoading(true);
       if (type == "put") {
-        axios.patch(`/hodimlar/${id}`, data);
+        await axios.patch(`/hodimlar/${id}`, dataInfo);
       } else {
-        axios.post("/hodimlar", data);
+        const { data } = await axios.post("/hodimlar", dataInfo);
+        console.log(data);
+        
+        dispatch(addData(data));
+        
       }
     } catch (err) {
       console.log(err);
