@@ -10,6 +10,7 @@ interface Props {
   data: ObjType;
 }
 export const Card = ({ data }: Props) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const dataArr = useSelector(
     (state: RootState) => state.employees.employeesArr
@@ -17,10 +18,15 @@ export const Card = ({ data }: Props) => {
   const { id, name, role, surname, img } = data;
   async function deleteData(id: number | undefined) {
     try {
-      dispatch(dataValue(dataArr.filter((item) => item.id != id)));
-      axios.delete(`hodimlar/${id}`);
+      setLoading(true);
+      const data = await axios.delete(`hodimlar/${id}`);
+      if (data.status == 200) {
+        dispatch(dataValue(dataArr.filter((item) => item.id != id)));
+      }
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   }
   const editFun = (id: number | undefined) => {
@@ -44,13 +50,16 @@ export const Card = ({ data }: Props) => {
               <PenSquareIcon />
               <p>Tahrirlash</p>
             </div>
-            <div
-              className=" flex items-center gap-4 cursor-pointer"
+            <button
+              className={`flex items-center gap-4 cursor-pointer ${
+                loading && "opacity-20"
+              } `}
               onClick={() => deleteData(id)}
+              disabled={loading}
             >
               <Trash2 color="red" />
               <p className="text-red-500">O'chirish</p>
-            </div>
+            </button>
           </div>
         )}
       </div>
