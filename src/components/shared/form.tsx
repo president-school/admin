@@ -8,7 +8,7 @@ import { ObjType } from "../../lib/types";
 import { useState } from "react";
 import { addData } from "../../store/employees-slice";
 interface Props {
-  type?: string;
+  type?: string |undefined;
   id?: number | undefined;
 }
 export const ModalForm = ({ type, id }: Props) => {
@@ -21,7 +21,7 @@ export const ModalForm = ({ type, id }: Props) => {
         await axios.patch(`/hodimlar/${id}`, dataInfo);
       } else {
         const { data } = await axios.post("/hodimlar", dataInfo);
-        console.log(data);
+        
         
         dispatch(addData(data));
         
