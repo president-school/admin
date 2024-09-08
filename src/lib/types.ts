@@ -1,7 +1,7 @@
 export interface ObjType {
     name: string;
     role: string;
-    surname: string;
+    full_name: string;
     id?: number;
     img: string;
   }

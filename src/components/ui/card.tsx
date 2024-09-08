@@ -15,7 +15,7 @@ export const Card = ({ data }: Props) => {
   const dataArr = useSelector(
     (state: RootState) => state.employees.employeesArr
   );
-  const { id, name, role, surname, img } = data;
+  const { id, role, full_name, img } = data;
   async function deleteData(id: number | undefined) {
     try {
       setLoading(true);
@@ -71,7 +71,7 @@ export const Card = ({ data }: Props) => {
         />
       </div>
       <h2 className="text-[24px] font-semibold text-[#303972] mb-2">
-        {name + " " + surname}
+        {full_name}
       </h2>
       <p className="mb-4">{role}</p>
       <div className="flex gap-4 items-center text-[#303972]">

@@ -40,17 +40,17 @@ export const ModalForm = ({ type, id }: Props) => {
         className="cursor-pointer mb-4"
         onClick={() => dispatch(setFromModal())}
       />
-      <label htmlFor="">Name</label>
+      <label htmlFor="">full_name</label>
       <Form autoComplete="off" onFinish={onSubmit}>
         <Form.Item
-          name={"name"}
+          name={"full_name"}
           rules={[{ required: true, message: "Please input your name!" }]}
         >
           <Input />
         </Form.Item>
-        <label htmlFor="">Surname</label>
+        <label htmlFor="">education</label>
         <Form.Item
-          name={"surname"}
+          name={"education"}
           rules={[{ required: true, message: "Please input your surname!" }]}
         >
           <Input />
@@ -64,7 +64,7 @@ export const ModalForm = ({ type, id }: Props) => {
         </Form.Item>
         <label htmlFor="">Photo url</label>
         <Form.Item
-          name={"url"}
+          name={"img"}
           rules={[{ required: true, message: "Please input your surname!" }]}
         >
           <Input />
