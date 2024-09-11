@@ -19,12 +19,11 @@ export const ModalForm = ({ type, id }: Props) => {
 
     try {
       setLoading(true);
-      if (type === 'put') {
-        await editEmployee(id, { ...dataInfo }).then((data) => data);
-      } else {
-        const data = await addEmployee({ id: uuid(), ...dataInfo }).then((data) => data);
-
+      if (id === 0) {
+        const data = await addEmployee(dataInfo).then((data) => data);
         dispatch(addData(data));
+      } else {
+        await editEmployee(id, { ...dataInfo }).then((data) => data);
       }
     } catch (err) {
       console.log(err);

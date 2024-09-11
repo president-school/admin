@@ -1,7 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { deleteDoc, doc, getFirestore } from 'firebase/firestore';
 
-// Firestore xizmatini oling
 const firebaseConfig = {
   apiKey: 'AIzaSyAuOA5J54sSMr59g4Qc0ylxaisGTxdnCIk',
   authDomain: 'president-school-8273b.firebaseapp.com',
