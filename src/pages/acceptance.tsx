@@ -2,8 +2,6 @@ import { Button, Form, Input } from 'antd';
 import { createOrUpdateText } from '../firebase/services';
 export const Acceptance = () => {
   const onSubmit = async (data: string) => {
-    console.log(data);
-
     await createOrUpdateText(data);
   };
   return (

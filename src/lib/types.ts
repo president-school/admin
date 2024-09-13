@@ -1,9 +1,16 @@
 export interface ObjType {
-  name: string;
+  photo: any;
+  full_name: string;
   role: 'worker' | 'teacher';
-  surname: string;
   id?: number | string;
   img: string;
+  isTeacher?: boolean;
+  description?: string;
+  education?: string;
+  scientific_degree?: string;
+  admission_days?: string;
+  phone?: string;
+  email?: string;
 }
 
 export interface IEditEmployee {
