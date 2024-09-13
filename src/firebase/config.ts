@@ -1,7 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-
-// Firestore xizmatini oling
+import { getStorage } from 'firebase/storage';
 const firebaseConfig = {
   apiKey: 'AIzaSyAuOA5J54sSMr59g4Qc0ylxaisGTxdnCIk',
   authDomain: 'president-school-8273b.firebaseapp.com',
@@ -14,4 +13,5 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-export { db };
+const storage = getStorage(app);
+export { db, storage };

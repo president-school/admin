@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { setEdit, setFromModal } from '../../store/booleans';
 import { deleteEmployee } from '../../firebase/services';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 interface Props {
   data: ObjType;
 }
@@ -13,21 +16,30 @@ export const Card = ({ data }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const dataArr = useSelector((state: RootState) => state.employees.employeesArr);
-  const { id, name, role, surname, img } = data;
-  async function deleteData(id: string) {
-    try {
-      setLoading(true);
-      await deleteEmployee(id);
-      dispatch(dataValue(dataArr.filter((item) => item.id !== id)));
-      console.log('Employee deleted:', id);
-    } catch (err) {
-      console.error('Error deleting employee:', err);
-    } finally {
-      setLoading(false);
+  const { id, full_name, role, photo } = data;
+  async function deleteData(id: string | undefined | number) {
+    if (id !== undefined) {
+      try {
+        setLoading(true);
+        await deleteEmployee(id)
+          .then(() => {
+            toast.success('Ishchi muvaffaqiyatli o`chirildi');
+          })
+          .catch(() => {
+            toast.error('Something went wrong');
+          });
+        dispatch(dataValue(dataArr.filter((item) => item.id !== id)));
+      } catch (err) {
+        console.error('Error deleting employee:', err);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      console.error('id is undefined');
     }
   }
 
-  const editFun = (id: number | undefined) => {
+  const editFun = (id: string | undefined | number) => {
     dispatch(setEdit(id));
     dispatch(setFromModal());
   };
@@ -54,10 +66,10 @@ export const Card = ({ data }: Props) => {
           </div>
         )}
       </div>
-      <div className="w-[120px] h-[120px] rounded-full bg-purple-300 mb-4">
-        <img src={img} alt="" className="w-full h-full rounded-full object-cover" />
+      <div className="w-[120px] rounded-lg h-[120px] mb-4">
+        <img src={photo} alt="user photo" className="w-full h-full rounded-full" />
       </div>
-      <h2 className="text-[24px] font-semibold text-[#303972] mb-2">{name + ' ' + surname}</h2>
+      <h2 className="text-[24px] font-semibold text-[#303972] mb-2">{full_name}</h2>
       <p className="mb-4">{role}</p>
       <div className="flex gap-4 items-center text-[#303972]">
         <PhoneCall />
