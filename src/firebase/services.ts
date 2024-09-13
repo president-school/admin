@@ -87,10 +87,14 @@ const getEmployees = async (): Promise<ObjType[]> => {
   }
 };
 
-const deleteEmployee = async (firestoreId: string) => {
+const deleteEmployee = async (firestoreId: string | number | undefined) => {
+  if (firestoreId === undefined) {
+    throw new Error('firestoreId is required');
+  }
+
   try {
     console.log('Attempting to delete employee with Firestore ID:', firestoreId);
-    const employeeDoc = doc(db, 'employees', firestoreId);
+    const employeeDoc = doc(db, 'employees', String(firestoreId));
     console.log('Document reference:', employeeDoc.path);
     await deleteDoc(employeeDoc);
     console.log('Employee deleted:', firestoreId);

@@ -17,25 +17,29 @@ export const Card = ({ data }: Props) => {
   const dispatch = useDispatch();
   const dataArr = useSelector((state: RootState) => state.employees.employeesArr);
   const { id, full_name, role, photo } = data;
-  async function deleteData(id: string) {
-    try {
-      setLoading(true);
-      await deleteEmployee(id)
-        .then(() => {
-          toast.success('Ishchi muvaffaqiyatli o`chirildi');
-        })
-        .catch(() => {
-          toast.error('Something went wrong');
-        });
-      dispatch(dataValue(dataArr.filter((item) => item.id !== id)));
-    } catch (err) {
-      console.error('Error deleting employee:', err);
-    } finally {
-      setLoading(false);
+  async function deleteData(id: string | undefined | number) {
+    if (id !== undefined) {
+      try {
+        setLoading(true);
+        await deleteEmployee(id)
+          .then(() => {
+            toast.success('Ishchi muvaffaqiyatli o`chirildi');
+          })
+          .catch(() => {
+            toast.error('Something went wrong');
+          });
+        dispatch(dataValue(dataArr.filter((item) => item.id !== id)));
+      } catch (err) {
+        console.error('Error deleting employee:', err);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      console.error('id is undefined');
     }
   }
 
-  const editFun = (id: number | undefined) => {
+  const editFun = (id: string | undefined | number) => {
     dispatch(setEdit(id));
     dispatch(setFromModal());
   };

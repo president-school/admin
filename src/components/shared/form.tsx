@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface Props {
-  id?: string | undefined;
+  id?: string | undefined | number;
 }
 
 export const ModalForm = ({ id }: Props) => {
@@ -24,11 +24,11 @@ export const ModalForm = ({ id }: Props) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (id) {
+    if (id && editId !== undefined) {
       const fetchEmployee = async () => {
         try {
           setLoading(true);
-          const data = await getEmployeeById(editId);
+          const data = await getEmployeeById(editId.toString());
           if (data) {
             setEmployeeData(data);
             form.setFieldsValue(data);
@@ -42,7 +42,7 @@ export const ModalForm = ({ id }: Props) => {
 
       fetchEmployee();
     }
-  }, [id, form]);
+  }, [id, form, editId]);
 
   const onSubmit = async (dataInfo: ObjType) => {
     try {
@@ -62,17 +62,19 @@ export const ModalForm = ({ id }: Props) => {
       };
 
       if (!id || id === '0') {
-        const data = await addEmployee(updatedEmployeeData)
+        await addEmployee(updatedEmployeeData)
           .then((data) => {
             toast.success('Muvaffaqiyatli qo`shildi');
             return data;
           })
+          .then((data) => {
+            dispatch(addData({ ...data, imgURL: '' }));
+          })
           .catch(() => {
             toast.error('Xatolik yuz berdi');
           });
-        dispatch(addData(data));
       } else {
-        await editEmployee(id, updatedEmployeeData)
+        await editEmployee(id.toString(), updatedEmployeeData)
           .then(() => {
             toast.success('Muvaffaqiyatli o`zgartirildi');
           })
@@ -80,15 +82,16 @@ export const ModalForm = ({ id }: Props) => {
             toast.error('Xatolik yuz berdi');
           });
       }
-    } catch (err) {
-      console.log('Error adding/editing employee:', err);
+    } catch (error) {
+      console.log('Error during submission:', error);
+      toast.error('Xatolik yuz berdi');
     } finally {
       setLoading(false);
-      dispatch(setFromModal());
     }
   };
 
   const handleFileChange = ({ fileList }: any) => setFileList(fileList || []);
+
   return (
     <div className="w-[600px] h-auto max-h-[80vh] overflow-y-auto bg-white rounded-xl p-4">
       <X className="cursor-pointer mb-4" onClick={() => dispatch(setFromModal())} />
@@ -177,7 +180,6 @@ export const ModalForm = ({ id }: Props) => {
           valuePropName="fileList"
           getValueFromEvent={(e) => (e && e.fileList) || []}
           rules={[{ required: id === '0', message: 'Please select a photo!' }]}>
-          {' '}
           <Upload
             listType="picture"
             beforeUpload={() => false}

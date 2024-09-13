@@ -3,7 +3,7 @@ export interface ObjType {
   full_name: string;
   role: 'worker' | 'teacher';
   id?: number | string;
-  img: string;
+  imgURL: string;
   isTeacher?: boolean;
   description?: string;
   education?: string;
