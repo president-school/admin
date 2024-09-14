@@ -116,18 +116,48 @@ const editEmployee = async (id: string, data: any): Promise<void> => {
   }
 };
 
-const createOrUpdateText = async (data: string) => {
+interface IHtmlToText {
+  description: string;
+}
+const convertTextToHtml = (input: string) => {
+  if (typeof input === 'object') {
+    console.error('Invalid input: Expected a string, but received an object. Extracting text...');
+    console.log('Input object:', input);
+
+    input = (input as IHtmlToText).description || '';
+  }
+
+  if (typeof input !== 'string') {
+    console.error('Invalid input: Expected a string, but received:', typeof input);
+    return '';
+  }
+
+  let html = input
+    .split('\n')
+    .map((line) => {
+      line = line.trim();
+      if (line) {
+        return `<p>${line}</p>`;
+      }
+      return '';
+    })
+    .join('');
+
+  html = html.replace(/➖/g, '<li>').replace(/✅/g, '<b>');
+
+  html = html.replace(/Maktabga qabul:/, '<h3>Maktabga qabul:</h3>');
+
+  return `<div>${html}</div>`;
+};
+
+const createOrUpdateText = async (html: string) => {
   try {
+    const data = convertTextToHtml(html);
+
     const textCollectionRef = collection(db, 'text');
     const querySnapshot = await getDocs(textCollectionRef);
     if (!querySnapshot.empty) {
       const docRef = querySnapshot.docs[0].ref;
-      //   <html>
-      //     <body>
-      //       <p>Text</p>
-      //       <p>Text</p>
-      //     </body>
-      //   </html>;
       await updateDoc(docRef, { text: data });
       console.log('Text document updated:', docRef.id);
     } else {

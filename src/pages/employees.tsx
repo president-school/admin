@@ -4,14 +4,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ObjType } from '../lib/types';
 import { RootState } from '../store/store';
 import { setFromModal } from '../store/booleans';
+import { useState } from 'react';
 
 export const Employees = () => {
   const dispatch = useDispatch();
   const data = useSelector((state: RootState) => state.employees.employeesArr);
 
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
   const addEmployees = () => {
     dispatch(setFromModal());
   };
+
+  const filteredData = data.filter((employee: ObjType) =>
+    employee.full_name.toLowerCase().startsWith(searchTerm.toLowerCase()),
+  );
 
   return (
     <main className="w-full p-10">
@@ -22,7 +29,9 @@ export const Employees = () => {
           <input
             type="text"
             placeholder="search"
-            className="outline-none border-none  bg-transparent"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="outline-none border-none bg-transparent"
           />
         </div>
 
@@ -33,8 +42,8 @@ export const Employees = () => {
           Hodim qo'shish
         </button>
       </div>
-      <section className="flex gap-10 flex-wrap  h-[calc(100vh-200px)] overflow-auto">
-        {data.map((item: ObjType) => (
+      <section className="flex gap-10 flex-wrap h-[calc(100vh-200px)] overflow-auto">
+        {filteredData.map((item: ObjType) => (
           <Card key={item.id} data={item} />
         ))}
       </section>

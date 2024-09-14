@@ -1,6 +1,12 @@
 import { UsersRound } from 'lucide-react';
+import { getEmployees } from '../firebase/services';
+import { useEffect, useState } from 'react';
 
 export const Home = () => {
+  const [employeesLength, setEmployeesLength] = useState(0);
+  useEffect(() => {
+    getEmployees().then((data) => setEmployeesLength(data.length));
+  }, []);
   return (
     <main className="w-full p-10">
       <h1 className="font-semibold text-[36px] text-[#303972] mb-11">Home</h1>
@@ -19,8 +25,8 @@ export const Home = () => {
             <UsersRound />
           </div>
           <div className="text-center">
-            <p>O'qituvchilar</p>
-            <h3 className="font-bold text-xl">700</h3>
+            <p>Teachers</p>
+            <h3 className="font-bold text-xl">{employeesLength}</h3>
           </div>
         </div>
       </section>
