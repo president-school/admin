@@ -1,24 +1,29 @@
-import { Ellipsis, Mail, PenSquareIcon, PhoneCall, Trash2 } from 'lucide-react';
-import { useState } from 'react';
-import { ObjType } from '../../lib/types';
-import { dataValue } from '../../store/employees-slice';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import { setEdit, setFromModal } from '../../store/booleans';
-import { deleteEmployee } from '../../firebase/services';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import ConfirmationModal from '../shared/confirmation-modal';
+import { Ellipsis, Mail, PenSquareIcon, PhoneCall, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { ObjType } from "../../lib/types";
+import { dataValue } from "../../store/employees-slice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { setEdit, setFromModal } from "../../store/booleans";
+import { deleteEmployee } from "../../firebase/services";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ConfirmationModal from "../shared/confirmation-modal";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   data: ObjType;
 }
 
 export const Card = ({ data }: Props) => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const dataArr = useSelector((state: RootState) => state.employees.employeesArr);
+
+  const dataArr = useSelector(
+    (state: RootState) => state.employees.employeesArr
+  );
   const { id, full_name, role, photo } = data;
 
   const deleteData = async (id: string | undefined | number) => {
@@ -27,19 +32,19 @@ export const Card = ({ data }: Props) => {
         setLoading(true);
         await deleteEmployee(id)
           .then(() => {
-            toast.success('Ishchi muvaffaqiyatli o`chirildi');
+            toast.success(t("toast.delete_success"));
             dispatch(dataValue(dataArr.filter((item) => item.id !== id)));
           })
           .catch(() => {
-            toast.error('Something went wrong');
+            toast.error("Something went wrong");
           });
       } catch (err) {
-        console.error('Error deleting employee:', err);
+        console.error("Error deleting employee:", err);
       } finally {
         setLoading(false);
       }
     } else {
-      console.error('id is undefined');
+      console.error("id is undefined");
     }
   };
 
@@ -67,24 +72,26 @@ export const Card = ({ data }: Props) => {
         <Ellipsis
           className="cursor-pointer"
           onClick={() => setPopupActive((c) => !c)}
-          style={{ color: '#606060' }}
+          style={{ color: "#606060" }}
         />
         {popupActive && (
           <div className="absolute top-8 right-4 p-4 bg-gray-50 border border-gray-200 rounded-md shadow-md">
             <div
               className="flex items-center gap-4 mb-4 cursor-pointer hover:bg-gray-200 p-2 rounded transition"
-              onClick={() => editFun(id)}>
+              onClick={() => editFun(id)}
+            >
               <PenSquareIcon />
-              <p className="text-sm">Tahrirlash</p>
+              <p className="text-sm">{t("employees.edit")}</p>
             </div>
             <button
               className={`flex items-center gap-4 cursor-pointer ${
-                loading ? 'opacity-50' : ''
+                loading ? "opacity-50" : ""
               } hover:bg-gray-200 p-2 rounded transition`}
               onClick={handleDeleteClick}
-              disabled={loading}>
+              disabled={loading}
+            >
               <Trash2 color="red" />
-              <p className="text-red-500 text-sm">O'chirish</p>
+              <p className="text-red-500 text-sm">{t("employees.delete")}</p>
             </button>
           </div>
         )}
@@ -92,9 +99,11 @@ export const Card = ({ data }: Props) => {
       <div className="w-full mb-4">
         <img src={photo} alt="user photo" className="w-full h-[300px]" />
       </div>
-      <h2 className="text-[24px] font-semibold text-[#303972] mb-2">{full_name}</h2>
+      <h2 className="text-[24px] font-semibold text-[#303972] mb-2">
+        {full_name}
+      </h2>
       <p className="text-sm text-gray-500 mb-4">
-        {role.toLowerCase() === 'worker' ? 'Employee' : role}
+        {role.toLowerCase() === "worker" ? t("employee") : t("form.teacher")}
       </p>
       <div className="flex gap-4 items-center text-[#303972]">
         <PhoneCall className="hover:text-[#4b5563] cursor-pointer transition transform hover:scale-105" />

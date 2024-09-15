@@ -9,6 +9,7 @@ import { addEmployee, editEmployee, getEmployeeById, uploadFile } from '../../fi
 import { UploadOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   id?: string | undefined | number;
@@ -22,7 +23,7 @@ export const ModalForm = ({ id }: Props) => {
   const [employeeData, setEmployeeData] = useState<ObjType | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [form] = Form.useForm();
-
+const {t} =useTranslation()
   useEffect(() => {
     if (id && editId !== undefined) {
       const fetchEmployee = async () => {
@@ -64,7 +65,7 @@ export const ModalForm = ({ id }: Props) => {
       if (!id || id === '0') {
         await addEmployee(updatedEmployeeData)
           .then((data) => {
-            toast.success('Muvaffaqiyatli qo`shildi');
+            toast.success(t("toast.post_success"));
             dispatch(setFromModal());
             return data;
           })
@@ -72,16 +73,16 @@ export const ModalForm = ({ id }: Props) => {
             dispatch(addData({ ...data, imgURL: '' }));
           })
           .catch(() => {
-            toast.error('Xatolik yuz berdi');
+            toast.error(t("toast.post_err"));
           });
       } else {
         await editEmployee(id.toString(), updatedEmployeeData)
           .then(() => {
-            toast.success('Muvaffaqiyatli o`zgartirildi');
+            toast.success(t("toast.edit_success"));
             dispatch(setFromModal());
           })
           .catch(() => {
-            toast.error('Xatolik yuz berdi');
+            toast.error(t("toast.post_err"));
           });
       }
     } catch (error) {
@@ -124,89 +125,89 @@ export const ModalForm = ({ id }: Props) => {
           autoComplete="off"
           onFinish={onSubmit}
           onClick={(e) => e.stopPropagation()}>
-          <label htmlFor="">Full Name</label>
+          <label htmlFor="">{t("form.full_name")}</label>
           <Form.Item
             initialValue={employeeData?.full_name}
             name={'full_name'}
-            rules={[{ required: true, message: 'Please input your full name!' }]}>
+            rules={[{ required: true, message:t("form.validation.name") }]}>
             <Input />
           </Form.Item>
 
-          <label htmlFor="">Description</label>
+          <label htmlFor="">{t("form.desc")}</label>
           <Form.Item
             initialValue={employeeData?.description}
             name={'description'}
-            rules={[{ required: true, message: 'Please input a description!' }]}>
+            rules={[{ required: true, message: t("form.validation.desc") }]}>
             <Input.TextArea rows={4} />
           </Form.Item>
 
-          <label htmlFor="">Education</label>
+          <label htmlFor="">{t("form.education")}</label>
           <Form.Item
             initialValue={employeeData?.education}
             name={'education'}
-            rules={[{ required: true, message: 'Please input your education!' }]}>
+            rules={[{ required: true, message: t("form.validation.education") }]}>
             <Input />
           </Form.Item>
 
-          <label htmlFor="">Scientific Degree</label>
+          <label htmlFor="">{t("form.scientific_degree")}</label>
           <Form.Item
             initialValue={employeeData?.scientific_degree}
             name={'scientific_degree'}
-            rules={[{ required: true, message: 'Please input your scientific degree!' }]}>
+            rules={[{ required: true, message: t("form.validation.degree") }]}>
             <Input />
           </Form.Item>
 
-          <label htmlFor="">Role</label>
+          <label htmlFor="">{t("form.role")}</label>
           <Form.Item
             name={'role'}
-            rules={[{ required: true, message: 'Please select your role!' }]}
+            rules={[{ required: true, message: t("form.validation.role") }]}
             initialValue={employeeData?.role}>
             <Select placeholder="Select your role">
-              <Select.Option value={'Teacher'}>Teacher</Select.Option>
-              <Select.Option value={'Worker'}>Worker</Select.Option>
+              <Select.Option value={'Teacher'}>{t("form.teacher")}</Select.Option>
+              <Select.Option value={'Worker'}>{t("form.worker")}</Select.Option>
             </Select>
           </Form.Item>
 
-          <label htmlFor="">Is Teacher</label>
+          <label htmlFor="">{t("form.is_teacher")}</label>
           <Form.Item
             name={'isTeacher'}
             valuePropName="checked"
             initialValue={employeeData?.isTeacher}>
-            <Checkbox>Is Teacher</Checkbox>
+            <Checkbox>{t("form.is_teacher")}</Checkbox>
           </Form.Item>
 
-          <label htmlFor="">Phone</label>
+          <label htmlFor="">{t("form.phone")}</label>
           <Form.Item
             initialValue={employeeData?.phone}
             name={'phone'}
-            rules={[{ required: true, message: 'Please input your phone number!' }]}>
+            rules={[{ required: true, message:t("form.validation.phone") }]}>
             <Input />
           </Form.Item>
 
-          <label htmlFor="">Email</label>
+          <label htmlFor="">{t("form.email")}</label>
           <Form.Item
             initialValue={employeeData?.email}
             name={'email'}
             rules={[
-              { required: true, message: 'Please input your email!' },
-              { type: 'email', message: 'The input is not a valid email!' },
+              { required: true, message: t("form.validation.email") },
+              { type: 'email', message: t("form.validation.email2") },
             ]}>
             <Input />
           </Form.Item>
 
-          <label htmlFor="">Admission Days</label>
+          <label htmlFor="">{t("form.admission_days")}</label>
           <Form.Item
             initialValue={employeeData?.admission_days}
             name={'admission_days'}
-            rules={[{ required: true, message: 'Please input the admission days!' }]}>
+            rules={[{ required: true, message: t("form.validation.days") }]}>
             <Input />
           </Form.Item>
 
-          <label htmlFor="photo">Photo</label>
+          <label htmlFor="photo">{t("form.photo")}</label>
           <Form.Item
             name="photo"
             getValueFromEvent={(e) => e.fileList}
-            rules={[{ required: id === '0', message: 'Please select a photo!' }]}>
+            rules={[{ required: id === '0', message: t("form.validation.photo") }]}>
             <Upload
               listType="picture"
               beforeUpload={() => false}
