@@ -98,7 +98,9 @@ export const ModalForm = ({ id }: Props) => {
     }, 10);
   }, []);
 
-  const handleFileChange = ({ fileList }: any) => setFileList(fileList || []);
+  const handleFileChange = ({ fileList }: { fileList: any[] }) => {
+    setFileList(fileList || []);
+  };
 
   const handleClose = () => {
     setIsVisible(false);
@@ -106,6 +108,7 @@ export const ModalForm = ({ id }: Props) => {
       dispatch(setFromModal());
     }, 300);
   };
+
   return (
     <div
       className={`fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 transition-opacity duration-300 ${
@@ -202,8 +205,7 @@ export const ModalForm = ({ id }: Props) => {
           <label htmlFor="photo">Photo</label>
           <Form.Item
             name="photo"
-            valuePropName="fileList"
-            getValueFromEvent={(e) => (e && e.fileList) || []}
+            getValueFromEvent={(e) => e.fileList}
             rules={[{ required: id === '0', message: 'Please select a photo!' }]}>
             <Upload
               listType="picture"
