@@ -56,7 +56,8 @@ const translationRu = {
     post_err: "Произошла ошибка",
     post_success: "Добавлено успешно",
     delete_success: "Работник успешно удален",
-    edit_success:"Изменено успешно"
+    edit_success:"Изменено успешно",
+    textAria_success: "информация успешно добавлена"
   },
 };
 

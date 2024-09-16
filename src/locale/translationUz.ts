@@ -58,7 +58,8 @@ const translationUz = {
     post_err:"Xatolik yuz berdi",
     post_success: "Muvaffaqiyatli qo`shildi",
      delete_success:"Ishchi muvaffaqiyatli o`chirildi",
-     edit_success:"Muvaffaqiyatli o`zgartirildi"
+     edit_success:"Muvaffaqiyatli o`zgartirildi",
+     textAria_success: "malimot Muvaffaqiyatli qo'shildi"
   }
 };
 
