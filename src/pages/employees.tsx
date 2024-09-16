@@ -3,22 +3,25 @@ import { Card } from '../components/ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { ObjType } from '../lib/types';
 import { RootState } from '../store/store';
-import { setFromModal } from '../store/booleans';
+import { setFromModal, setMethod } from '../store/booleans';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDebounce } from '../hooks/use-debauce';
 
 export const Employees = () => {
   const dispatch = useDispatch();
   const data = useSelector((state: RootState) => state.employees.employeesArr);
 
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const searchValue =useDebounce(searchTerm,500)
  const {t} =useTranslation()
   const addEmployees = () => {
     dispatch(setFromModal());
+    dispatch(setMethod("post"))
   };
 
   const filteredData = data.filter((employee: ObjType) =>
-    employee.full_name.toLowerCase().startsWith(searchTerm.toLowerCase()),
+    employee.full_name.toLowerCase().startsWith(searchValue.toLowerCase()),
   );
 
   return (

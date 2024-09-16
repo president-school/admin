@@ -17,6 +17,7 @@ interface Props {
 
 export const ModalForm = ({ id }: Props) => {
   const dispatch = useDispatch();
+  const method =useSelector((state: RootState) => state.booleans.method)
   const editId = useSelector((state: RootState) => state.booleans.edit);
   const [loading, setLoading] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
@@ -24,13 +25,16 @@ export const ModalForm = ({ id }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
   const [form] = Form.useForm();
 const {t} =useTranslation()
+
   useEffect(() => {
     if (id && editId !== undefined) {
       const fetchEmployee = async () => {
         try {
           setLoading(true);
           const data = await getEmployeeById(editId.toString());
-          if (data) {
+          console.log(data);
+          
+          if (method =="put") {
             setEmployeeData(data);
             form.setFieldsValue(data);
           }

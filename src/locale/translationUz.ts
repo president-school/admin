@@ -10,7 +10,7 @@ const translationUz = {
   home: {
     title: "Bosh sahifa",
     teachers: "O'qituvchilar",
-    students: "O'quvchilar",
+    employees: "Hodimlar",
   },
   employees: {
     title: "Hodimlar",
