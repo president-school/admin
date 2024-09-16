@@ -8,7 +8,7 @@ const translationRu = {
   home: {
     title: "главный",
     teachers: "учителя",
-    students: "студенты",
+    employees: "сотрудники",
   },
   employees: {
     title: "Сотрудники",

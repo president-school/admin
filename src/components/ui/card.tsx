@@ -4,7 +4,7 @@ import { ObjType } from "../../lib/types";
 import { dataValue } from "../../store/employees-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { setEdit, setFromModal } from "../../store/booleans";
+import { setEdit, setFromModal, setMethod } from "../../store/booleans";
 import { deleteEmployee } from "../../firebase/services";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -62,6 +62,7 @@ export const Card = ({ data }: Props) => {
   const editFun = (id: string | undefined | number) => {
     dispatch(setEdit(id));
     dispatch(setFromModal());
+    dispatch(setMethod("put"))
   };
 
   const [popupActive, setPopupActive] = useState<boolean>(false);

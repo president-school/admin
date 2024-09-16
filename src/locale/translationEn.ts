@@ -8,7 +8,7 @@ const translationEn = {
   home: {
     title: "Home",
     teachers: "Teachers",
-    students: "Students",
+    employees: "Employees",
   },
   employees: {
     title: "Employees",
