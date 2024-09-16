@@ -56,7 +56,8 @@ const translationEn = {
     post_err: "An error occurred",
     post_success: "Added successfully",
      delete_success:"The worker was successfully deleted",
-     edit_success:"Changed successfully"
+     edit_success:"Changed successfully",
+     textAria_success: "info Added successfully"
   },
 };
 
