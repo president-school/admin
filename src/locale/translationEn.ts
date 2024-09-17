@@ -9,11 +9,12 @@ const translationEn = {
     title: "Home",
     teachers: "Teachers",
     employees: "Employees",
+    all_employees: "All employees",
   },
   employees: {
     title: "Employees",
     search: "Search",
-    add: "add employees",
+    add: "add employee",
     edit: "Edit",
     delete: "Delete",
     confirmation: "Confirmation",
@@ -39,6 +40,7 @@ const translationEn = {
     email: "Email",
     admission_days: "Admission Days",
     photo: "Photo",
+    position: "Position",
     validation: {
       name: "Please input your full name!",
       desc: "Please input a description!",
@@ -55,9 +57,9 @@ const translationEn = {
   toast: {
     post_err: "An error occurred",
     post_success: "Added successfully",
-     delete_success:"The worker was successfully deleted",
-     edit_success:"Changed successfully",
-     textAria_success: "info Added successfully"
+    delete_success: "The worker was successfully deleted",
+    edit_success: "Changed successfully",
+    textAria_success: "info Added successfully",
   },
 };
 

@@ -9,6 +9,7 @@ const translationRu = {
     title: "главный",
     teachers: "учителя",
     employees: "сотрудники",
+    all_employees:"все сотрудники"
   },
   employees: {
     title: "Сотрудники",
@@ -39,6 +40,7 @@ const translationRu = {
     email: "Электронная почта",
     admission_days: "Дни приема",
     photo: "Фото",
+    position:"позиция",
     validation: {
       name: "Пожалуйста, введите Ваше полное имя!",
       desc: "Пожалуйста, введите описание",

@@ -11,9 +11,9 @@ import { initReactI18next } from "react-i18next";
 import translationEn from "./locale/translationEn";
 import translationUz from "./locale/translationUz";
 import translationRu from "./locale/translationRu";
+import { setLoading } from "./store/booleans";
 
 function App() {
-  
   const langue = localStorage.getItem("langue");
   const dispatch = useDispatch();
   const FormModalActive = useSelector(
@@ -25,14 +25,20 @@ function App() {
       uz: { translation: translationUz },
       ru: { translation: translationRu },
     },
-    lng: `${langue ||"uz"}`,
-    fallbackLng: `${langue ||"uz"}`,
+    lng: `${langue || "uz"}`,
+    fallbackLng: `${langue || "uz"}`,
   });
 
   const fetching = async () => {
-    const data = await getEmployees();
-
-    dispatch(dataValue(data));
+    try {
+      dispatch(setLoading(true));
+      const data = await getEmployees();
+      dispatch(dataValue(data));
+    } catch (err) {
+      console.log(err);
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
   useEffect(() => {
     fetching();
