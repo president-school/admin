@@ -1,4 +1,4 @@
-import { Ellipsis, Mail, PenSquareIcon, PhoneCall, Trash2 } from "lucide-react";
+import { Ellipsis, PenSquareIcon, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { ObjType } from "../../lib/types";
 import { dataValue } from "../../store/employees-slice";
@@ -24,7 +24,7 @@ export const Card = ({ data }: Props) => {
   const dataArr = useSelector(
     (state: RootState) => state.employees.employeesArr
   );
-  const { id, full_name, role, photo } = data;
+  const { id, full_name, role, photo, position } = data;
 
   const deleteData = async (id: string | undefined | number) => {
     if (id !== undefined) {
@@ -62,13 +62,13 @@ export const Card = ({ data }: Props) => {
   const editFun = (id: string | undefined | number) => {
     dispatch(setEdit(id));
     dispatch(setFromModal());
-    dispatch(setMethod("put"))
+    dispatch(setMethod("put"));
   };
 
   const [popupActive, setPopupActive] = useState<boolean>(false);
 
   return (
-    <div className="w-[338px] h-auto bg-white p-6 flex flex-col items-center border border-gray-200 shadow-sm relative rounded-2xl">
+    <div className="w-[338px] h-auto bg-white p-6 flex flex-col  border border-gray-200 shadow-sm relative rounded-2xl">
       <div className="flex justify-end w-full">
         <Ellipsis
           className="cursor-pointer"
@@ -76,7 +76,7 @@ export const Card = ({ data }: Props) => {
           style={{ color: "#606060" }}
         />
         {popupActive && (
-          <div className="absolute top-8 right-4 p-4 bg-gray-50 border border-gray-200 rounded-md shadow-md">
+          <div className="absolute top-14 right-4 p-4 bg-gray-50 border border-gray-200 rounded-md shadow-md">
             <div
               className="flex items-center gap-4 mb-4 cursor-pointer hover:bg-gray-200 p-2 rounded transition"
               onClick={() => editFun(id)}
@@ -98,18 +98,24 @@ export const Card = ({ data }: Props) => {
         )}
       </div>
       <div className="w-full mb-4">
-        <img src={photo} alt="user photo" className="w-full h-[300px] rounded-xl" />
+      
+        <img
+          src={photo? photo :"/user-logo.png"}
+          alt="user photo"
+          className="w-full h-[250px] rounded-xl "
+        />
       </div>
-      <h2 className="text-[24px] font-semibold text-[#303972] mb-2">
+      <h2 className="text-[18px] font-semibold text-[#303972] mb-2">
         {full_name}
       </h2>
-      <p className="text-sm text-gray-500 mb-4">
+      <p className="text text-gray-700 mb-1 ">
+        {t("form.role")}:{" "}
         {role.toLowerCase() === "worker" ? t("employee") : t("form.teacher")}
       </p>
-      <div className="flex gap-4 items-center text-[#303972]">
-        <PhoneCall className="hover:text-[#4b5563] cursor-pointer transition transform hover:scale-105" />
-        <Mail className="hover:text-[#4b5563] cursor-pointer transition transform hover:scale-105" />
-      </div>
+      <p className="text text-gray-700 mb-1 ">
+        {t("form.position")}: {position}
+      
+      </p>
 
       <ConfirmationModal
         isOpen={isModalOpen}

@@ -7,14 +7,23 @@ import { ObjType } from "../lib/types";
 export const Home = () => {
   const { t } = useTranslation();
   const [employeesLength, setEmployeesLength] = useState<ObjType[]>([]);
+  const [employees, setEmployees] = useState<ObjType[]>([]);
   const [teachers, setTeachers] = useState<ObjType[]>([]);
   const fetching = async () => {
-    getEmployees().then((data) => setEmployeesLength(data));
-    const teacher = employeesLength.filter((item) => item.isTeacher);
-    setTeachers(teacher);
+    await getEmployees().then((data) => {
+      setEmployees(data);
+      setEmployeesLength(
+        data.filter((item) => item.role.toLowerCase() !== "teacher")
+      );
+
+      setTeachers(data.filter((item) => item.role.toLowerCase() == "teacher"));
+    });
+  };
+  const fetchData = async () => {
+    await fetching();
   };
   useEffect(() => {
-    fetching();
+    fetchData();
   }, []);
 
   return (
@@ -39,6 +48,15 @@ export const Home = () => {
           <div className="text-center">
             <p>{t("home.teachers")}</p>
             <h3 className="font-bold text-xl">{teachers.length}</h3>
+          </div>
+        </div>
+        <div className="flex gap-4">
+          <div className="rounded-full p-4 bg-purple-950 text-white">
+            <UsersRound />
+          </div>
+          <div className="text-center">
+            <p>{t("home.all_employees")}</p>
+            <h3 className="font-bold text-xl">{employees.length}</h3>
           </div>
         </div>
       </section>

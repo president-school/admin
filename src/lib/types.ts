@@ -11,6 +11,8 @@ export interface ObjType {
   admission_days?: string;
   phone?: string;
   email?: string;
+  position:string
+  
 }
 
 export interface IEditEmployee {

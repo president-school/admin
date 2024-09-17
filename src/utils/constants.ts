@@ -1,7 +1,7 @@
 import { Home, Users, UserPlus } from 'lucide-react';
 
 
-export const Logo = '/logo.svg';
+export const Logo = '/logo.jpg';
 
 export const sidebarList = [
   { id: 1, Icon: Home, label: 'home', url: '/' },
