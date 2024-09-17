@@ -1,5 +1,6 @@
-import { Button, Form, Input } from 'antd';
-import { createOrUpdateText } from '../firebase/services';
+import { Button, Form, Input } from "antd";
+import { createOrUpdateText } from "../firebase/services";
+
 export const Acceptance = () => {
   const onSubmit = async (data: string) => {
     console.log(data);
@@ -12,11 +13,13 @@ export const Acceptance = () => {
         layout="vertical"
         onFinish={(values) => {
           onSubmit(values);
-        }}>
+        }}
+      >
         <Form.Item
-          name={'description'}
+          name={"description"}
           label="Description"
-          rules={[{ required: true, message: 'Please input the description!' }]}>
+          rules={[{ required: true, message: "Please input the description!" }]}
+        >
           <Input.TextArea placeholder="Enter your description here" rows={4} />
         </Form.Item>
 

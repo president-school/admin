@@ -1,4 +1,5 @@
-import { db } from './config';
+/* eslint-disable no-useless-catch */
+import { db } from "./config";
 import {
   collection,
   addDoc,
@@ -8,12 +9,12 @@ import {
   updateDoc,
   where,
   query,
-} from 'firebase/firestore';
-import { ObjType } from '../lib/types';
+} from "firebase/firestore";
+import { ObjType } from "../lib/types";
 
 const addEmployee = async (data: ObjType) => {
   try {
-    const employeesCollectionRef = collection(db, 'employees');
+    const employeesCollectionRef = collection(db, "employees");
     await addDoc(employeesCollectionRef, data);
     return { id: data.id, ...data };
   } catch (error) {
@@ -23,7 +24,7 @@ const addEmployee = async (data: ObjType) => {
 
 const getEmployees = async (): Promise<ObjType[]> => {
   try {
-    const employeesCollectionRef = collection(db, 'employees');
+    const employeesCollectionRef = collection(db, "employees");
     const querySnapshot = await getDocs(employeesCollectionRef);
     const employees: ObjType[] = querySnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -37,7 +38,7 @@ const getEmployees = async (): Promise<ObjType[]> => {
 
 const deleteEmployee = async (id: string) => {
   try {
-    const employeeDoc = doc(db, 'employees', id);
+    const employeeDoc = doc(db, "employees", id);
     await deleteDoc(employeeDoc);
   } catch (error) {
     throw error;
@@ -46,7 +47,7 @@ const deleteEmployee = async (id: string) => {
 
 const editEmployee = async (id: string, data: any): Promise<void> => {
   try {
-    const employeeDoc = doc(db, 'employees', id);
+    const employeeDoc = doc(db, "employees", id);
     await updateDoc(employeeDoc, data);
   } catch (error) {
     console.error("Xodimni o'zgartirishda xato:", error);
@@ -56,7 +57,7 @@ const editEmployee = async (id: string, data: any): Promise<void> => {
 
 const createOrUpdateText = async (data: string) => {
   try {
-    const textCollectionRef = collection(db, 'text');
+    const textCollectionRef = collection(db, "text");
 
     const querySnapshot = await getDocs(textCollectionRef);
 
@@ -71,4 +72,10 @@ const createOrUpdateText = async (data: string) => {
   }
 };
 
-export { addEmployee, getEmployees, deleteEmployee, editEmployee, createOrUpdateText };
+export {
+  addEmployee,
+  getEmployees,
+  deleteEmployee,
+  editEmployee,
+  createOrUpdateText,
+};

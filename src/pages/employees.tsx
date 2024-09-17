@@ -4,6 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { ObjType } from "../lib/types";
 import { RootState } from "../store/store";
 import { setFromModal } from "../store/booleans";
+import MyEditor from "../components/ui/area";
+
+if (typeof global === "undefined") {
+  global = window;
+}
 
 export const Employees = () => {
   const dispatch = useDispatch();
@@ -18,6 +23,8 @@ export const Employees = () => {
       <h1 className="font-semibold text-[36px] text-[#303972] mb-4">
         Hodimlar
       </h1>
+
+      <MyEditor />
       <div className="flex items-center justify-between mb-4">
         <div className="px-4 py-2 rounded-3xl bg-white flex gap-4 items-center">
           <SearchIcon size={16} className="text-[#303972]" />
