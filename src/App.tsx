@@ -1,7 +1,7 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import i18n from "i18next";
 import { FormModal, Sidebar } from "./components/shared";
-import { Employees, Home, Acceptance } from "./pages";
+import { Employees, Home, Acceptance, Login } from "./pages";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { dataValue } from "./store/employees-slice";
@@ -14,6 +14,8 @@ import translationRu from "./locale/translationRu";
 import { setLoading } from "./store/booleans";
 
 function App() {
+  let store = useSelector((state:RootState) => state.booleans)
+  const { admin } = store
   const langue = localStorage.getItem("langue");
   const dispatch = useDispatch();
   const FormModalActive = useSelector(
@@ -44,14 +46,16 @@ function App() {
     fetching();
   }, []);
 
+
   return (
-    <div className="flex h-screen w-full">
-      <Sidebar />
-      {FormModalActive && <FormModal />}
+    <div className="flex h-screen w-full relative">
+      {admin && <Sidebar/>}
+      {FormModalActive && <FormModal/>}
       <Routes>
-        <Route index element={<Home />} />
-        <Route path="/employees" element={<Employees />} />
-        <Route path="/acceptance" element={<Acceptance />} />
+        <Route path="/" element={admin ? <Home/> : <Navigate to="/login"/>} />
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/employees" element={<Employees />}/>
+        <Route path="/acceptance" element={<Acceptance />}/>
       </Routes>
     </div>
   );
