@@ -5,6 +5,7 @@ type State = {
   edit: string | undefined | number;
   method: string;
   loading: boolean;
+  admin: string
 };
 const initialState: State = {
   fromModal: false,
@@ -12,6 +13,7 @@ const initialState: State = {
   edit: 0,
   method: "post",
   loading: false,
+  admin: localStorage?.getItem('userRole') || '',
 };
 const booleansSlice = createSlice({
   name: "booleans",
@@ -32,8 +34,11 @@ const booleansSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
+    setAdmin: (state, action: PayloadAction<string>) => {
+      state.admin = action.payload;
+    }
   },
 });
-export const { setFromModal, setFetching, setEdit, setMethod, setLoading } =
+export const { setFromModal, setFetching, setEdit, setMethod, setLoading, setAdmin } =
   booleansSlice.actions;
 export default booleansSlice.reducer;

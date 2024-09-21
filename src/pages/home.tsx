@@ -3,6 +3,8 @@ import { getEmployees } from "../firebase/services";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ObjType } from "../lib/types";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export const Home = () => {
   const { t } = useTranslation();
@@ -24,10 +26,25 @@ export const Home = () => {
   };
   useEffect(() => {
     fetchData();
+    const showToast = localStorage.getItem('showToast');
+    if (showToast) {
+      toast.success(t("success"), {
+        theme: 'colored'
+      });
+      setTimeout(() => {
+        localStorage.removeItem('showToast');
+      }, 4000);
+    }
   }, []);
+
 
   return (
     <main className="w-full p-10">
+      <ToastContainer
+        theme='colored'
+        pauseOnHover = {false}
+        autoClose={3000}
+      />
       <h1 className="font-semibold text-[36px] text-[#303972] mb-11">
         {t("home.title")}
       </h1>

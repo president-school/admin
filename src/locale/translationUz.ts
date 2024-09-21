@@ -1,5 +1,7 @@
 const translationUz = {
   employee: "Hodim",
+  success : "Ro'yhatdan muvaffaqiyatli o'tdingiz!",
+  fail : "Noto'g'ri login yoki parol",
   sidebar: {
     home: "Bosh sahifa",
     employees: "Hodimlar",
