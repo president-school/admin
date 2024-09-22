@@ -14,8 +14,8 @@ import translationRu from "./locale/translationRu";
 import { setLoading } from "./store/booleans";
 
 function App() {
-  let store = useSelector((state:RootState) => state.booleans)
-  const { admin } = store
+  const store = useSelector((state: RootState) => state.booleans);
+  const { admin } = store;
   const langue = localStorage.getItem("langue");
   const dispatch = useDispatch();
   const FormModalActive = useSelector(
@@ -46,16 +46,21 @@ function App() {
     fetching();
   }, []);
 
-
   return (
     <div className="flex h-screen w-full relative">
-      {admin && <Sidebar/>}
-      {FormModalActive && <FormModal/>}
+      {admin && <Sidebar />}
+      {FormModalActive && <FormModal />}
       <Routes>
-        <Route path="/" element={admin ? <Home/> : <Navigate to="/login"/>} />
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/employees" element={<Employees />}/>
-        <Route path="/acceptance" element={<Acceptance />}/>
+        <Route path="/" element={admin ? <Home /> : <Navigate to="/login" />} />
+        <Route path="/login" element={admin ? <Home /> : <Login />} />
+        <Route
+          path="/employees"
+          element={admin ? <Employees /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/acceptance"
+          element={admin ? <Acceptance /> : <Navigate to="/login" />}
+        />
       </Routes>
     </div>
   );
