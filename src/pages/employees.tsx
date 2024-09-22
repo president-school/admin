@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PlusCircleIcon, SearchIcon } from "lucide-react";
 import { Card } from "../components/ui";
 import { useDispatch, useSelector } from "react-redux";
@@ -51,8 +52,10 @@ export const Employees = () => {
         </button>
       </div>
       <section className="flex gap-10 flex-wrap h-[calc(100vh-200px)] overflow-auto">
-        {loading && new Array(8).fill(0).map((_,index) => <MyLoader key={index} />)}
-        {loading || sortData.map((item: ObjType) => <Card key={item.id} data={item} />)}
+        {loading &&
+          new Array(8).fill(0).map((_, index) => <MyLoader key={index} />)}
+        {loading ||
+          sortData.map((item: ObjType) => <Card key={item.id} data={item} />)}
       </section>
     </main>
   );
