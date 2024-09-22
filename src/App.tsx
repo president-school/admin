@@ -61,6 +61,26 @@ function App() {
           path="/acceptance"
           element={admin ? <Acceptance /> : <Navigate to="/login" />}
         />
+        <Route
+          path="*"
+          element={
+            admin ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontSize: "36px",
+                  fontWeight: "900",
+                }}
+              >
+                <p>Not founded page</p>
+              </div>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
       </Routes>
     </div>
   );
