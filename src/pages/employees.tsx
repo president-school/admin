@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PlusCircleIcon, SearchIcon } from "lucide-react";
 import { Card } from "../components/ui";
 import { useDispatch, useSelector } from "react-redux";
