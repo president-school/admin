@@ -26,8 +26,8 @@ export const Sidebar = () => {
   return (
     <article className="w-80 h-screen bg-[#4D44B5] p-10 pr-0 pt-8">
       <div className="flex items-center gap-4 mb-11">
-        <img src={Logo} alt="" />
-        <h1 className="text-[32px]  font-bold text-white">Akademi</h1>
+        <img src={Logo} alt="" className="w-20  h-20 rounded-md" />
+        <h1 className="text-[32px]  font-bold text-white">Admin</h1>
       </div>
       <div className="flex flex-col">
         {sidebarList.map((item) => (

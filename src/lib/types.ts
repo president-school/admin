@@ -11,6 +11,8 @@ export interface ObjType {
   admission_days?: string;
   phone?: string;
   email?: string;
+  position:string
+  
 }
 
 export interface IEditEmployee {
@@ -24,4 +26,9 @@ export interface IEditEmployee {
 export type Inputs = {
   example: string;
   exampleRequired: string;
+};
+
+export type FieldType = {
+  login: string;
+  password: string;
 };

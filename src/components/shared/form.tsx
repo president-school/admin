@@ -1,15 +1,20 @@
-import { setFromModal } from '../../store/booleans';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import { Button, Form, Input, Select, Upload, Checkbox } from 'antd';
-import { ObjType } from '../../lib/types';
-import { useState, useEffect } from 'react';
-import { addData } from '../../store/employees-slice';
-import { addEmployee, editEmployee, getEmployeeById, uploadFile } from '../../firebase/services';
-import { UploadOutlined } from '@ant-design/icons';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useTranslation } from 'react-i18next';
+import { setFromModal } from "../../store/booleans";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { Button, Form, Input, Select, Upload } from "antd";
+import { ObjType } from "../../lib/types";
+import { useState, useEffect, useRef } from "react";
+import { addData } from "../../store/employees-slice";
+import {
+  addEmployee,
+  editEmployee,
+  getEmployeeById,
+  uploadFile,
+} from "../../firebase/services";
+import { UploadOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   id?: string | undefined | number;
@@ -17,14 +22,14 @@ interface Props {
 
 export const ModalForm = ({ id }: Props) => {
   const dispatch = useDispatch();
-  const method =useSelector((state: RootState) => state.booleans.method)
+  const method = useSelector((state: RootState) => state.booleans.method);
   const editId = useSelector((state: RootState) => state.booleans.edit);
   const [loading, setLoading] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
   const [employeeData, setEmployeeData] = useState<ObjType | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [form] = Form.useForm();
-const {t} =useTranslation()
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (id && editId !== undefined) {
@@ -33,13 +38,13 @@ const {t} =useTranslation()
           setLoading(true);
           const data = await getEmployeeById(editId.toString());
           console.log(data);
-          
-          if (method =="put") {
+
+          if (method == "put") {
             setEmployeeData(data);
             form.setFieldsValue(data);
           }
         } catch (error) {
-          console.log('Error fetching employee data:', error);
+          console.log("Error fetching employee data:", error);
         } finally {
           setLoading(false);
         }
@@ -48,12 +53,15 @@ const {t} =useTranslation()
       fetchEmployee();
     }
   }, [id, form, editId]);
+  const data = Date.now();
+
+  console.log(typeof data);
 
   const onSubmit = async (dataInfo: ObjType) => {
     try {
       setLoading(true);
 
-      let photoURL = dataInfo.photo || '';
+      let photoURL = dataInfo.photo || "";
 
       if (fileList.length > 0) {
         const file = fileList[0].originFileObj;
@@ -63,10 +71,11 @@ const {t} =useTranslation()
       const updatedEmployeeData = {
         ...dataInfo,
         photo: photoURL,
-        isTeacher: dataInfo.isTeacher !== undefined ? dataInfo.isTeacher : false,
+        isTeacher: dataInfo.role.toLowerCase() == "teacher" ? true : false,
+        newDate: data,
       };
 
-      if (!id || id === '0') {
+      if (!id || id === "0") {
         await addEmployee(updatedEmployeeData)
           .then((data) => {
             toast.success(t("toast.post_success"));
@@ -74,7 +83,7 @@ const {t} =useTranslation()
             return data;
           })
           .then((data) => {
-            dispatch(addData({ ...data, imgURL: '' }));
+            dispatch(addData({ ...data, imgURL: "" }));
           })
           .catch(() => {
             toast.error(t("toast.post_err"));
@@ -85,13 +94,14 @@ const {t} =useTranslation()
             toast.success(t("toast.edit_success"));
             dispatch(setFromModal());
           })
+
           .catch(() => {
             toast.error(t("toast.post_err"));
           });
       }
     } catch (error) {
-      console.log('Error during submission:', error);
-      toast.error('Xatolik yuz berdi');
+      console.log("Error during submission:", error);
+      toast.error("Xatolik yuz berdi");
     } finally {
       setLoading(false);
     }
@@ -106,104 +116,126 @@ const {t} =useTranslation()
   const handleFileChange = ({ fileList }: { fileList: any[] }) => {
     setFileList(fileList || []);
   };
+  const wrapper = useRef<HTMLDivElement | null>(null);
 
-  const handleClose = () => {
-    setIsVisible(false);
-    setTimeout(() => {
-      dispatch(setFromModal());
-    }, 300);
+  console.log(wrapper);
+
+  const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
+    const value = e.target;
+    if (value == wrapper.current) {
+      setIsVisible(false);
+      setTimeout(() => {
+        dispatch(setFromModal());
+      }, 300);
+    }
   };
 
   return (
     <div
-      className={`fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 transition-opacity duration-300 ${
-        isVisible ? 'opacity-100' : 'opacity-0'
+      ref={wrapper}
+      className={`fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 transition-opacity duration-300 z-10 ${
+        isVisible ? "opacity-100" : "opacity-0"
       }`}
-      onClick={handleClose}>
+      onClick={handleClose}
+    >
       <div
         className={`w-[600px] h-auto max-h-[80vh] overflow-y-auto bg-white p-4 transform transition-transform duration-300 ${
-          isVisible ? 'translate-y-0' : '-translate-y-10'
-        }`}>
+          isVisible ? "translate-y-0" : "-translate-y-10"
+        }`}
+      >
         <Form
           form={form}
           autoComplete="off"
           onFinish={onSubmit}
-          onClick={(e) => e.stopPropagation()}>
+          onClick={(e) => e.stopPropagation()}
+        >
           <label htmlFor="">{t("form.full_name")}</label>
           <Form.Item
             initialValue={employeeData?.full_name}
-            name={'full_name'}
-            rules={[{ required: true, message:t("form.validation.name") }]}>
+            name={"full_name"}
+            rules={[{ required: true, message: t("form.validation.name") }]}
+          >
             <Input />
           </Form.Item>
 
           <label htmlFor="">{t("form.desc")}</label>
           <Form.Item
             initialValue={employeeData?.description}
-            name={'description'}
-            rules={[{ required: true, message: t("form.validation.desc") }]}>
+            name={"description"}
+            rules={[{ required: true, message: t("form.validation.desc") }]}
+          >
             <Input.TextArea rows={4} />
           </Form.Item>
 
           <label htmlFor="">{t("form.education")}</label>
           <Form.Item
             initialValue={employeeData?.education}
-            name={'education'}
-            rules={[{ required: true, message: t("form.validation.education") }]}>
+            name={"education"}
+            rules={[
+              { required: true, message: t("form.validation.education") },
+            ]}
+          >
             <Input />
           </Form.Item>
 
           <label htmlFor="">{t("form.scientific_degree")}</label>
           <Form.Item
             initialValue={employeeData?.scientific_degree}
-            name={'scientific_degree'}
-            rules={[{ required: true, message: t("form.validation.degree") }]}>
+            name={"scientific_degree"}
+            rules={[{ required: true, message: t("form.validation.degree") }]}
+          >
             <Input />
           </Form.Item>
 
           <label htmlFor="">{t("form.role")}</label>
           <Form.Item
-            name={'role'}
+            name={"role"}
             rules={[{ required: true, message: t("form.validation.role") }]}
-            initialValue={employeeData?.role}>
+            initialValue={employeeData?.role}
+          >
             <Select placeholder="Select your role">
-              <Select.Option value={'Teacher'}>{t("form.teacher")}</Select.Option>
-              <Select.Option value={'Worker'}>{t("form.worker")}</Select.Option>
+              <Select.Option value={"Teacher"}>
+                {t("form.teacher")}
+              </Select.Option>
+              <Select.Option value={"Worker"}>{t("form.worker")}</Select.Option>
             </Select>
           </Form.Item>
-
-          <label htmlFor="">{t("form.is_teacher")}</label>
+          <label htmlFor="">{t("form.position")}</label>
           <Form.Item
-            name={'isTeacher'}
-            valuePropName="checked"
-            initialValue={employeeData?.isTeacher}>
-            <Checkbox>{t("form.is_teacher")}</Checkbox>
+            name={"position"}
+            rules={[{ required: true, message: t("form.validation.role") }]}
+            initialValue={employeeData?.role}
+          >
+            <Input />
           </Form.Item>
 
           <label htmlFor="">{t("form.phone")}</label>
           <Form.Item
             initialValue={employeeData?.phone}
-            name={'phone'}
-            rules={[{ required: true, message:t("form.validation.phone") }]}>
+            name={"phone"}
+            rules={[{ required: true, message: t("form.validation.phone") }]}
+          >
             <Input />
           </Form.Item>
 
           <label htmlFor="">{t("form.email")}</label>
           <Form.Item
             initialValue={employeeData?.email}
-            name={'email'}
+            name={"email"}
             rules={[
               { required: true, message: t("form.validation.email") },
-              { type: 'email', message: t("form.validation.email2") },
-            ]}>
+              { type: "email", message: t("form.validation.email2") },
+            ]}
+          >
             <Input />
           </Form.Item>
 
           <label htmlFor="">{t("form.admission_days")}</label>
           <Form.Item
             initialValue={employeeData?.admission_days}
-            name={'admission_days'}
-            rules={[{ required: true, message: t("form.validation.days") }]}>
+            name={"admission_days"}
+            rules={[{ required: true, message: t("form.validation.days") }]}
+          >
             <Input />
           </Form.Item>
 
@@ -211,12 +243,16 @@ const {t} =useTranslation()
           <Form.Item
             name="photo"
             getValueFromEvent={(e) => e.fileList}
-            rules={[{ required: id === '0', message: t("form.validation.photo") }]}>
+            rules={[
+              { required: id === "0", message: t("form.validation.photo") },
+            ]}
+          >
             <Upload
               listType="picture"
               beforeUpload={() => false}
               onChange={handleFileChange}
-              fileList={fileList}>
+              fileList={fileList}
+            >
               <Button icon={<UploadOutlined />}>Select Photo</Button>
             </Upload>
           </Form.Item>

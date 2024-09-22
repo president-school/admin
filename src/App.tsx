@@ -1,7 +1,7 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import i18n from "i18next";
 import { FormModal, Sidebar } from "./components/shared";
-import { Employees, Home, Acceptance } from "./pages";
+import { Employees, Home, Acceptance, Login } from "./pages";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { dataValue } from "./store/employees-slice";
@@ -11,9 +11,11 @@ import { initReactI18next } from "react-i18next";
 import translationEn from "./locale/translationEn";
 import translationUz from "./locale/translationUz";
 import translationRu from "./locale/translationRu";
+import { setLoading } from "./store/booleans";
 
 function App() {
-  
+  let store = useSelector((state:RootState) => state.booleans)
+  const { admin } = store
   const langue = localStorage.getItem("langue");
   const dispatch = useDispatch();
   const FormModalActive = useSelector(
@@ -25,27 +27,35 @@ function App() {
       uz: { translation: translationUz },
       ru: { translation: translationRu },
     },
-    lng: `${langue ||"uz"}`,
-    fallbackLng: `${langue ||"uz"}`,
+    lng: `${langue || "uz"}`,
+    fallbackLng: `${langue || "uz"}`,
   });
 
   const fetching = async () => {
-    const data = await getEmployees();
-
-    dispatch(dataValue(data));
+    try {
+      dispatch(setLoading(true));
+      const data = await getEmployees();
+      dispatch(dataValue(data));
+    } catch (err) {
+      console.log(err);
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
   useEffect(() => {
     fetching();
   }, []);
 
+
   return (
-    <div className="flex h-screen w-full">
-      <Sidebar />
-      {FormModalActive && <FormModal />}
+    <div className="flex h-screen w-full relative">
+      {admin && <Sidebar/>}
+      {FormModalActive && <FormModal/>}
       <Routes>
-        <Route index element={<Home />} />
-        <Route path="/employees" element={<Employees />} />
-        <Route path="/acceptance" element={<Acceptance />} />
+        <Route path="/" element={admin ? <Home/> : <Navigate to="/login"/>} />
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/employees" element={<Employees />}/>
+        <Route path="/acceptance" element={<Acceptance />}/>
       </Routes>
     </div>
   );

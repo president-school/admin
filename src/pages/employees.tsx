@@ -7,11 +7,12 @@ import { setFromModal, setMethod } from "../store/booleans";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDebounce } from "../hooks/use-debauce";
+import MyLoader from "../components/ui/card-loader";
 
 export const Employees = () => {
   const dispatch = useDispatch();
   const data = useSelector((state: RootState) => state.employees.employeesArr);
-
+  const loading = useSelector((state: RootState) => state.booleans.loading);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const searchValue = useDebounce(searchTerm, 500);
   const { t } = useTranslation();
@@ -23,7 +24,7 @@ export const Employees = () => {
   const filteredData = data.filter((employee: ObjType) =>
     employee.full_name.toLowerCase().startsWith(searchValue.toLowerCase())
   );
-
+  const sortData = filteredData.sort((a: any, b: any) => a.newDate - b.newDate);
   return (
     <main className="w-full p-10">
       <h1 className="font-semibold text-[36px] text-[#303972] mb-4">
@@ -50,9 +51,10 @@ export const Employees = () => {
         </button>
       </div>
       <section className="flex gap-10 flex-wrap h-[calc(100vh-200px)] overflow-auto">
-        {filteredData.map((item: ObjType) => (
-          <Card key={item.id} data={item} />
-        ))}
+        {loading &&
+          new Array(8).fill(0).map((_, index) => <MyLoader key={index} />)}
+        {loading ||
+          sortData.map((item: ObjType) => <Card key={item.id} data={item} />)}
       </section>
     </main>
   );

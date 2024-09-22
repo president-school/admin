@@ -1,7 +1,7 @@
-
-
 const translationUz = {
   employee: "Hodim",
+  success : "Ro'yhatdan muvaffaqiyatli o'tdingiz!",
+  fail : "Noto'g'ri login yoki parol",
   sidebar: {
     home: "Bosh sahifa",
     employees: "Hodimlar",
@@ -11,6 +11,7 @@ const translationUz = {
     title: "Bosh sahifa",
     teachers: "O'qituvchilar",
     employees: "Hodimlar",
+    all_employees: "Barcha hodimlar",
   },
   employees: {
     title: "Hodimlar",
@@ -41,26 +42,27 @@ const translationUz = {
     email: "Elektron pochta",
     admission_days: "qabul kunlari",
     photo: "surat",
-    validation:{
-      name:"Iltimos, toʻliq ismingizni kiriting!",
-      desc:"Iltimos, tavsifni kiriting!",
-      education:"Iltimos, ma'lumotingizni kiriting!",
-      degree:"Iltimos, ilmiy darajangizni kiriting!",
-      role:"Rolingizni tanlang!",
-      "phone":"Iltimos, telefon raqamingizni kiriting!",
-      email:"Iltimos, elektron pochtangizni kiriting!",
-      email2:"Kiritilgan e-pochta haqiqiy emas!",
-      days:"Iltimos, qabul kunlarini kiriting!",
-      photo:"Iltimos, rasm tanlang!",
-    }
+    position: "Lavozim",
+    validation: {
+      name: "Iltimos, toʻliq ismingizni kiriting!",
+      desc: "Iltimos, tavsifni kiriting!",
+      education: "Iltimos, ma'lumotingizni kiriting!",
+      degree: "Iltimos, ilmiy darajangizni kiriting!",
+      role: "Rolingizni tanlang!",
+      phone: "Iltimos, telefon raqamingizni kiriting!",
+      email: "Iltimos, elektron pochtangizni kiriting!",
+      email2: "Kiritilgan e-pochta haqiqiy emas!",
+      days: "Iltimos, qabul kunlarini kiriting!",
+      photo: "Iltimos, rasm tanlang!",
+    },
   },
-  toast:{
-    post_err:"Xatolik yuz berdi",
+  toast: {
+    post_err: "Xatolik yuz berdi",
     post_success: "Muvaffaqiyatli qo`shildi",
-     delete_success:"Ishchi muvaffaqiyatli o`chirildi",
-     edit_success:"Muvaffaqiyatli o`zgartirildi",
-     textAria_success: "malimot Muvaffaqiyatli qo'shildi"
-  }
+    delete_success: "Ishchi muvaffaqiyatli o`chirildi",
+    edit_success: "Muvaffaqiyatli o`zgartirildi",
+    textAria_success: "malimot Muvaffaqiyatli qo'shildi",
+  },
 };
 
 export default translationUz;

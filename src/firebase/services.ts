@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { db, storage } from "./config";
 import {
   collection,
@@ -16,7 +15,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
-
+const newDate = Date.now();
 const addEmployee = async (formData: ObjType) => {
   try {
     const {
@@ -30,6 +29,7 @@ const addEmployee = async (formData: ObjType) => {
       email,
       admission_days,
       photo,
+      position,
     } = formData;
 
     const employeeData = {
@@ -43,6 +43,8 @@ const addEmployee = async (formData: ObjType) => {
       email,
       admission_days,
       photo,
+      position,
+      newDate,
     };
 
     const employeesCollectionRef = collection(db, "employees");
