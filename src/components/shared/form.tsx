@@ -118,17 +118,6 @@ export const ModalForm = ({ id }: Props) => {
   };
   const wrapper = useRef<HTMLDivElement | null>(null);
 
-  console.log(wrapper);
-
-  const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
-    const value = e.target;
-    if (value == wrapper.current) {
-      setIsVisible(false);
-      setTimeout(() => {
-        dispatch(setFromModal());
-      }, 300);
-    }
-  };
 
   return (
     <div
@@ -136,7 +125,6 @@ export const ModalForm = ({ id }: Props) => {
       className={`fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 transition-opacity duration-300 z-10 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
-      onClick={handleClose}
     >
       <div
         className={`w-[600px] h-auto max-h-[80vh] overflow-y-auto bg-white p-4 transform transition-transform duration-300 ${
