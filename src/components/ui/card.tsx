@@ -68,7 +68,7 @@ export const Card = ({ data }: Props) => {
   const [popupActive, setPopupActive] = useState<boolean>(false);
 
   return (
-    <div className="w-[338px] h-auto bg-white p-6 flex flex-col  border border-gray-200 shadow-sm relative rounded-2xl">
+    <div className="w-[338px] h-max bg-white p-6 flex flex-col  border border-gray-200 shadow-sm relative rounded-2xl">
       <div className="flex justify-end w-full">
         <Ellipsis
           className="cursor-pointer"

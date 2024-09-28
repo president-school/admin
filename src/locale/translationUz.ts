@@ -2,6 +2,7 @@ const translationUz = {
   employee: "Hodim",
   success : "Ro'yhatdan muvaffaqiyatli o'tdingiz!",
   fail : "Noto'g'ri login yoki parol",
+  noemployees : "Xodimlar yo'q",
   sidebar: {
     home: "Bosh sahifa",
     employees: "Hodimlar",
