@@ -2,6 +2,7 @@ const translationRu = {
   employee: "Сотрудник",
   success : "Вы успешно зарегистрировались!",
   fail : "Неверный логин или пароль",
+  noemployees : "Нет сотрудников",
   sidebar: {
     home: "главный",
     employees: "сотрудники",

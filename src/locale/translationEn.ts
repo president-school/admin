@@ -2,6 +2,7 @@ const translationEn = {
   employee: "Employee",
   success : "You have successfully registered!",
   fail : "Incorrect login or password",
+  noemployees : "No employees",
   sidebar: {
     home: "Home",
     employees: "Employees",

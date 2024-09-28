@@ -15,6 +15,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next";
+import MaskedInput from 'antd-mask-input'
 
 interface Props {
   id?: string | undefined | number;
@@ -54,8 +55,6 @@ export const ModalForm = ({ id }: Props) => {
     }
   }, [id, form, editId]);
   const data = Date.now();
-
-  console.log(typeof data);
 
   const onSubmit = async (dataInfo: ObjType) => {
     try {
@@ -201,9 +200,19 @@ export const ModalForm = ({ id }: Props) => {
           <Form.Item
             initialValue={employeeData?.phone}
             name={"phone"}
-            rules={[{ required: true, message: t("form.validation.phone") }]}
+            rules={
+              [
+                { 
+                  required: true,
+                  message: t("form.validation.phone") 
+                }
+              ]
+            }
           >
-            <Input />
+            <MaskedInput
+              mask="+000(00)000-00-00"
+              placeholder="+999(99)999-99-99"
+            />
           </Form.Item>
 
           <label htmlFor="">{t("form.email")}</label>
