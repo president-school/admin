@@ -36,7 +36,7 @@ const translationUz = {
     scientific_degree: "Ilmiy sertifikat",
     role: "ro'li",
     teacher: "O'qituvchi",
-    worker: "Ishchi",
+    worker: "Rahbariyat",
     is_teacher: "O'qituvchi",
     phone: "Telefon",
     email: "Elektron pochta",
