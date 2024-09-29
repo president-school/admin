@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next";
 import MaskedInput from 'antd-mask-input'
+import CloseIcon from '@mui/icons-material/Close';
 
 interface Props {
   id?: string | undefined | number;
@@ -117,10 +118,20 @@ export const ModalForm = ({ id }: Props) => {
   };
   const wrapper = useRef<HTMLDivElement | null>(null);
 
+  const handleClose = (e : React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target
+    e.stopPropagation()
+    if(target == wrapper.current){
+      setIsVisible(false);
+      setTimeout(() => {
+        dispatch(setFromModal())
+      }, 300);
+    }
+  }
+
 
   return (
     <div
-      ref={wrapper}
       className={`fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 transition-opacity duration-300 z-10 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
@@ -130,6 +141,11 @@ export const ModalForm = ({ id }: Props) => {
           isVisible ? "translate-y-0" : "-translate-y-10"
         }`}
       >
+        <div className="w-full flex justify-end">
+          <div onClick={handleClose} ref={wrapper} className="w-max cursor-pointer">
+            <CloseIcon className="pointer-events-none text-4xl"/>
+          </div>
+        </div>
         <Form
           form={form}
           autoComplete="off"
