@@ -53,7 +53,8 @@ export const Employees = () => {
       </div>
       <section className={`flex ${sortData.length > 0 ? 'gap-10 flex-wrap h-[calc(100vh-200px)] overflow-auto' : 'items-center justify-center h-[400px]'}`}>
         {loading &&
-          new Array(8).fill(0).map((_, index) => <MyLoader key={index} />)}
+          new Array(3).fill(0).map((_, index) => <MyLoader key={index} />)
+        } 
         {loading ||
           sortData.length > 0
           ?
