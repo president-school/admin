@@ -9,7 +9,7 @@ export interface ObjType {
   education?: string;
   scientific_degree?: string;
   admission_days?: string;
-  phone?: string;
+  phone?: string | RegExp;
   email?: string;
   position:string
   

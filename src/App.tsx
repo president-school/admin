@@ -1,4 +1,5 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+/* eslint-disable prefer-const */
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import i18n from "i18next";
 import { FormModal, Sidebar } from "./components/shared";
 import { Employees, Home, Acceptance, Login } from "./pages";
@@ -14,8 +15,9 @@ import translationRu from "./locale/translationRu";
 import { setLoading } from "./store/booleans";
 
 function App() {
-  const store = useSelector((state: RootState) => state.booleans);
+  let store = useSelector((state: RootState) => state.booleans);
   const { admin } = store;
+  const navigate = useNavigate();
   const langue = localStorage.getItem("langue");
   const dispatch = useDispatch();
   const FormModalActive = useSelector(
@@ -45,6 +47,25 @@ function App() {
   useEffect(() => {
     fetching();
   }, []);
+
+  let inactivityTime = 0;
+  const inactivityLimit = 600000;
+
+  function resetInactivityTimer() {
+    inactivityTime = 0;
+  }
+
+  window.addEventListener("mousemove", resetInactivityTimer);
+  window.addEventListener("keypress", resetInactivityTimer);
+  window.addEventListener("click", resetInactivityTimer);
+
+  setInterval(() => {
+    inactivityTime += 1000;
+    if (inactivityTime >= inactivityLimit) {
+      sessionStorage.removeItem("userRole");
+      navigate("/login");
+    }
+  }, 1000);
 
   return (
     <div className="flex h-screen w-full relative">

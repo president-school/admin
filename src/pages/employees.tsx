@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PlusCircleIcon, SearchIcon } from "lucide-react";
 import { Card } from "../components/ui";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,16 +44,26 @@ export const Employees = () => {
         </div>
 
         <button
-          className="p-4 rounded-2xl bg-purple-800 text-white flex items-center gap-4"
+          className="p-4 rounded-2xl bg-[#4D44B5] text-white flex items-center gap-4"
           onClick={addEmployees}
         >
           <PlusCircleIcon />
           {t("employees.add")}
         </button>
       </div>
-      <section className="flex gap-10 flex-wrap h-[calc(100vh-200px)] overflow-auto">
-        {loading && new Array(8).fill(0).map((_,index) => <MyLoader key={index} />)}
-        {loading || sortData.map((item: ObjType) => <Card key={item.id} data={item} />)}
+      <section className={`flex ${sortData.length > 0 ? 'gap-10 flex-wrap h-[calc(100vh-200px)] overflow-auto' : 'items-center justify-center h-[400px]'}`}>
+        {loading &&
+          new Array(3).fill(0).map((_, index) => <MyLoader key={index} />)
+        } 
+        {loading ||
+          sortData.length > 0
+          ?
+            sortData.map((item: ObjType) => <Card key={item.id} data={item} />)
+          :
+            <h1 className="font-semibold text-[36px] text-[#303972] mb-4">
+              {t("noemployees")}
+            </h1>
+        }
       </section>
     </main>
   );

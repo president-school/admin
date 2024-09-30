@@ -2,6 +2,7 @@ const translationEn = {
   employee: "Employee",
   success : "You have successfully registered!",
   fail : "Incorrect login or password",
+  noemployees : "No employees",
   sidebar: {
     home: "Home",
     employees: "Employees",
@@ -36,7 +37,7 @@ const translationEn = {
     scientific_degree: "Scientific Degree",
     role: "Role",
     teacher: "Teacher",
-    worker: "Worker",
+    worker: "Management",
     is_teacher: "Is teacher",
     phone: "Phone",
     email: "Email",

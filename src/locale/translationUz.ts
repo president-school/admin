@@ -2,6 +2,7 @@ const translationUz = {
   employee: "Hodim",
   success : "Ro'yhatdan muvaffaqiyatli o'tdingiz!",
   fail : "Noto'g'ri login yoki parol",
+  noemployees : "Xodimlar yo'q",
   sidebar: {
     home: "Bosh sahifa",
     employees: "Hodimlar",
@@ -36,7 +37,7 @@ const translationUz = {
     scientific_degree: "Ilmiy sertifikat",
     role: "ro'li",
     teacher: "O'qituvchi",
-    worker: "Ishchi",
+    worker: "Rahbariyat",
     is_teacher: "O'qituvchi",
     phone: "Telefon",
     email: "Elektron pochta",

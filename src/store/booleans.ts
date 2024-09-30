@@ -13,7 +13,7 @@ const initialState: State = {
   edit: 0,
   method: "post",
   loading: false,
-  admin: localStorage?.getItem('userRole') || '',
+  admin: sessionStorage?.getItem('userRole') || '',
 };
 const booleansSlice = createSlice({
   name: "booleans",
