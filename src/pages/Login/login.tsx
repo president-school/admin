@@ -18,7 +18,7 @@ export const Login = () => {
   const handleAdmin = () => {
     dispatch(setAdmin('ADMIN'))
     localStorage.setItem('showToast', 'true');
-    localStorage.setItem('userRole', 'ADMIN')
+    sessionStorage.setItem('userRole', 'ADMIN')
   }
   
 
