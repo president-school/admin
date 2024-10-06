@@ -15,8 +15,8 @@ import { UploadOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next";
-import MaskedInput from 'antd-mask-input'
-import CloseIcon from '@mui/icons-material/Close';
+import MaskedInput from "antd-mask-input";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface Props {
   id?: string | undefined | number;
@@ -72,7 +72,6 @@ export const ModalForm = ({ id }: Props) => {
         ...dataInfo,
         photo: photoURL,
         isTeacher: dataInfo.role.toLowerCase() == "teacher" ? true : false,
-        newDate: data,
       };
 
       if (!id || id === "0") {
@@ -118,17 +117,16 @@ export const ModalForm = ({ id }: Props) => {
   };
   const wrapper = useRef<HTMLDivElement | null>(null);
 
-  const handleClose = (e : React.MouseEvent<HTMLDivElement>) => {
-    const target = e.target
-    e.stopPropagation()
-    if(target == wrapper.current){
+  const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target;
+    e.stopPropagation();
+    if (target == wrapper.current) {
       setIsVisible(false);
       setTimeout(() => {
-        dispatch(setFromModal())
+        dispatch(setFromModal());
       }, 300);
     }
-  }
-
+  };
 
   return (
     <div
@@ -142,8 +140,12 @@ export const ModalForm = ({ id }: Props) => {
         }`}
       >
         <div className="w-full flex justify-end">
-          <div onClick={handleClose} ref={wrapper} className="w-max cursor-pointer">
-            <CloseIcon className="pointer-events-none text-4xl"/>
+          <div
+            onClick={handleClose}
+            ref={wrapper}
+            className="w-max cursor-pointer"
+          >
+            <CloseIcon className="pointer-events-none text-4xl" />
           </div>
         </div>
         <Form
@@ -216,14 +218,12 @@ export const ModalForm = ({ id }: Props) => {
           <Form.Item
             initialValue={employeeData?.phone}
             name={"phone"}
-            rules={
-              [
-                { 
-                  required: true,
-                  message: t("form.validation.phone") 
-                }
-              ]
-            }
+            rules={[
+              {
+                required: true,
+                message: t("form.validation.phone"),
+              },
+            ]}
           >
             <MaskedInput
               mask="+000(00)000-00-00"
