@@ -55,7 +55,6 @@ export const ModalForm = ({ id }: Props) => {
       fetchEmployee();
     }
   }, [id, form, editId]);
-  const data = Date.now();
 
   const onSubmit = async (dataInfo: ObjType) => {
     try {
