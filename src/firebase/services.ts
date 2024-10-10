@@ -31,6 +31,7 @@ const addEmployee = async (formData: ObjType) => {
       admission_days,
       photo,
       position,
+      number
     } = formData;
 
     const employeeData = {
@@ -45,6 +46,7 @@ const addEmployee = async (formData: ObjType) => {
       admission_days,
       photo,
       position,
+      number,
       newDate,
     };
 
@@ -114,9 +116,9 @@ const deleteEmployee = async (firestoreId: string | number | undefined) => {
       firestoreId
     );
     const employeeDoc = doc(db, "employees", String(firestoreId));
-    console.log("Document reference:", employeeDoc.path);
+    // console.log("Document reference:", employeeDoc.path);
     await deleteDoc(employeeDoc);
-    console.log("Employee deleted:", firestoreId);
+    // console.log("Employee deleted:", firestoreId);
   } catch (error) {
     console.error("Error deleting employee:", error);
     throw error;
@@ -125,10 +127,10 @@ const deleteEmployee = async (firestoreId: string | number | undefined) => {
 
 const editEmployee = async (id: string, data: any): Promise<void> => {
   try {
-    console.log("Received ID for edit:", id);
+    // console.log("Received ID for edit:", id);
     const employeeDoc = doc(db, "employees", id);
     await updateDoc(employeeDoc, data);
-    console.log("Employee updated:", id);
+    // console.log("Employee updated:", id);
   } catch (error) {
     console.error("Error updating employee:", error);
     throw error;
@@ -143,7 +145,7 @@ const convertTextToHtml = (input: string) => {
     console.error(
       "Invalid input: Expected a string, but received an object. Extracting text..."
     );
-    console.log("Input object:", input);
+    // console.log("Input object:", input);
 
     input = (input as IHtmlToText).description || "";
   }

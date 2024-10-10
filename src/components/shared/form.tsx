@@ -26,6 +26,7 @@ export const ModalForm = ({ id }: Props) => {
   const dispatch = useDispatch();
   const method = useSelector((state: RootState) => state.booleans.method);
   const editId = useSelector((state: RootState) => state.booleans.edit);
+  const arr = useSelector((state: RootState) => state.employees.employeesArr);
   const [loading, setLoading] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
   const [employeeData, setEmployeeData] = useState<ObjType | null>(null);
@@ -39,7 +40,6 @@ export const ModalForm = ({ id }: Props) => {
         try {
           setLoading(true);
           const data = await getEmployeeById(editId.toString());
-          console.log(data);
 
           if (method == "put") {
             setEmployeeData(data);
@@ -82,7 +82,9 @@ export const ModalForm = ({ id }: Props) => {
             return data;
           })
           .then((data) => {
-            dispatch(addData({ ...data, imgURL: "" }));
+            dispatch(addData({
+              ...data, imgURL: ""
+            }));
           })
           .catch(() => {
             toast.error(t("toast.post_err"));
@@ -226,7 +228,7 @@ export const ModalForm = ({ id }: Props) => {
             ]}
           >
             <MaskedInput
-              mask="+000(00)000-00-00"
+              mask="+998(00)000-00-00"
               placeholder="+999(99)999-99-99"
             />
           </Form.Item>
@@ -250,6 +252,15 @@ export const ModalForm = ({ id }: Props) => {
             rules={[{ required: true, message: t("form.validation.days") }]}
           >
             <Input />
+          </Form.Item>
+
+          <label htmlFor="">{`${t("form.number")}(${t("form.validation.edge")} ${arr.length + 1})`}</label>
+          <Form.Item
+            initialValue={employeeData?.number}
+            name={"number"}
+            rules={[{ required: true, message: `${t("form.validation.edge")}${arr.length + 1}`}]}
+          >
+            <Input type="text"/>
           </Form.Item>
 
           <label htmlFor="photo">{t("form.photo")}</label>

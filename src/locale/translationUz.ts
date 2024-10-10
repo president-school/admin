@@ -44,6 +44,7 @@ const translationUz = {
     admission_days: "qabul kunlari",
     photo: "surat",
     position: "Lavozim",
+    number: "xodim raqami",
     validation: {
       name: "Iltimos, toʻliq ismingizni kiriting!",
       desc: "Iltimos, tavsifni kiriting!",
@@ -55,6 +56,7 @@ const translationUz = {
       email2: "Kiritilgan e-pochta haqiqiy emas!",
       days: "Iltimos, qabul kunlarini kiriting!",
       photo: "Iltimos, rasm tanlang!",
+      edge: "raqam chegarasi: "
     },
   },
   toast: {

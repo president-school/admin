@@ -14,6 +14,8 @@ import translationUz from "./locale/translationUz";
 import translationRu from "./locale/translationRu";
 import { setLoading } from "./store/booleans";
 
+
+
 function App() {
   let store = useSelector((state: RootState) => state.booleans);
   const { admin } = store;

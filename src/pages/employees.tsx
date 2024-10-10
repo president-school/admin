@@ -21,11 +21,18 @@ export const Employees = () => {
     dispatch(setFromModal());
     dispatch(setMethod("post"));
   };
+  
 
   const filteredData = data.filter((employee: ObjType) =>
     employee.full_name.toLowerCase().startsWith(searchValue.toLowerCase())
   );
   const sortData = filteredData.sort((a: any, b: any) => a.newDate - b.newDate);
+
+  let newArray: ObjType[] = []
+  sortData.forEach(item => {
+    let index = Number(item.number);
+    newArray.splice(index-1, 0, item);
+  });
   return (
     <main className="w-full p-10">
       <h1 className="font-semibold text-[36px] text-[#303972] mb-4">
@@ -56,9 +63,9 @@ export const Employees = () => {
           new Array(3).fill(0).map((_, index) => <MyLoader key={index} />)
         } 
         {loading ||
-          sortData.length > 0
+          newArray.length > 0
           ?
-            sortData.map((item: ObjType) => <Card key={item.id} data={item} />)
+            newArray.map((item: ObjType) => <Card key={item.id} data={item} />)
           :
             <h1 className="font-semibold text-[36px] text-[#303972] mb-4">
               {t("noemployees")}
