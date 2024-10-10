@@ -11,8 +11,8 @@ export interface ObjType {
   admission_days?: string;
   phone?: string | RegExp;
   email?: string;
-  position:string
-  
+  position:string;
+  number: number;
 }
 
 export interface IEditEmployee {

@@ -44,6 +44,7 @@ const translationEn = {
     admission_days: "Admission Days",
     photo: "Photo",
     position: "Position",
+    number: "employee number",
     validation: {
       name: "Please input your full name!",
       desc: "Please input a description!",
@@ -55,6 +56,7 @@ const translationEn = {
       email2: "The input is not a valid email!",
       days: "Please input the admission days!",
       photo: "Please select a photo!",
+      edge: "Edge of number: "
     },
   },
   toast: {
