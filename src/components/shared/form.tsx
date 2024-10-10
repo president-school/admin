@@ -254,11 +254,11 @@ export const ModalForm = ({ id }: Props) => {
             <Input />
           </Form.Item>
 
-          <label htmlFor="">{t("form.number")}</label>
+          <label htmlFor="">{`${t("form.number")}(${t("form.validation.edge")} ${arr.length + 1})`}</label>
           <Form.Item
             initialValue={employeeData?.number}
             name={"number"}
-            rules={[{ pattern: `^[0-${arr.length + 1}]$` , message: `${t("form.validation.edge")}${arr.length + 1}` }]}
+            rules={[{ required: true, message: `${t("form.validation.edge")}${arr.length + 1}`}]}
           >
             <Input type="text"/>
           </Form.Item>

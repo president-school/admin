@@ -56,7 +56,7 @@ const translationEn = {
       email2: "The input is not a valid email!",
       days: "Please input the admission days!",
       photo: "Please select a photo!",
-      edge: "Edge of number: "
+      edge: "edge of number: "
     },
   },
   toast: {

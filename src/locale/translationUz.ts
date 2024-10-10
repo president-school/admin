@@ -56,7 +56,7 @@ const translationUz = {
       email2: "Kiritilgan e-pochta haqiqiy emas!",
       days: "Iltimos, qabul kunlarini kiriting!",
       photo: "Iltimos, rasm tanlang!",
-      edge: "Raqam chegarasi: "
+      edge: "raqam chegarasi: "
     },
   },
   toast: {
