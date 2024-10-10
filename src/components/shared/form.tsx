@@ -258,9 +258,9 @@ export const ModalForm = ({ id }: Props) => {
           <Form.Item
             initialValue={employeeData?.number}
             name={"number"}
-            rules={[{ pattern: `^[0-${arr.length + 1}]$` , message: `${t("form.validation.edge")}${arr.length + 1}` }]}
+            rules={[{ required: true , message: `${t("form.validation.edge")}${arr.length + 1}` }]}
           >
-            <Input type="number"/>
+            <Input/>
           </Form.Item>
 
           <label htmlFor="photo">{t("form.photo")}</label>
