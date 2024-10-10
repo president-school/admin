@@ -12,7 +12,7 @@ export interface ObjType {
   phone?: string | RegExp;
   email?: string;
   position:string;
-  number: number;
+  number: string;
 }
 
 export interface IEditEmployee {
