@@ -55,7 +55,7 @@ const translationRu = {
     scientific_degree: "Ученая степень",
     role: "Роль",
     teacher: "Учитель",
-    worker: "Рабочий",
+    worker: "Руководство",
     is_teacher: "Учитель",
     phone: "Телефон",
     email: "Электронная почта",

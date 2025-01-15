@@ -280,7 +280,7 @@ const convertTextToHtml = (input: string) => {
     console.error(
       "Invalid input: Expected a string, but received an object. Extracting text..."
     );
-    console.log("Input object:", input);
+    // console.log("Input object:", input);
 
     input = (input as IHtmlToText).description || "";
   }

@@ -74,7 +74,7 @@ export const Employees = () => {
         </div>
 
         <button
-          className="p-4 rounded-2xl bg-purple-800 text-white flex items-center gap-4"
+          className="p-4 rounded-2xl bg-[#4D44B5] text-white flex items-center gap-4"
           onClick={addEmployees}
         >
           <PlusCircleIcon />

@@ -56,7 +56,7 @@ const translationEn = {
     scientific_degree: "Scientific Degree",
     role: "Role",
     teacher: "Teacher",
-    worker: "Worker",
+    worker: "Management",
     is_teacher: "Is teacher",
     phone: "Phone",
     email: "Email",

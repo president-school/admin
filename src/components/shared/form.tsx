@@ -2,7 +2,7 @@ import { Button, Form, Input, message, Select, Upload } from "antd";
 import { AddEmployeeFormData } from "../../utils/types";
 import { useState, useEffect } from "react";
 
-import { UploadOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
 
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next";
@@ -187,6 +187,11 @@ export const ModalForm = () => {
           isVisible ? "translate-y-0" : "-translate-y-10"
         }`}
       >
+        <div className="w-full flex justify-end">
+          <div onClick={handleClose} className="w-max cursor-pointer">
+            <CloseCircleOutlined className="pointer-events-none text-4xl" />
+          </div>
+        </div>
         <Form
           form={form}
           autoComplete="off"
