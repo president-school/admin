@@ -1,74 +1,51 @@
 import { Ellipsis, PenSquareIcon, Trash2 } from "lucide-react";
-import { useState } from "react";
-import { ObjType } from "../../lib/types";
-import { dataValue } from "../../store/employees-slice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
-import { setEdit, setFromModal, setMethod } from "../../store/booleans";
-import { deleteEmployee } from "../../firebase/services";
-import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { ObjType } from "../../utils/types";
+
 import "react-toastify/dist/ReactToastify.css";
 import ConfirmationModal from "../shared/confirmation-modal";
 import { useTranslation } from "react-i18next";
-
+import { DeleteData } from "../../firebase/services";
+import { setFormModalFun } from "../../utils/dispatch";
 interface Props {
   data: ObjType;
+  refresh: () => void;
 }
-
-export const Card = ({ data }: Props) => {
+export const Card = ({ data, refresh }: Props) => {
   const { t } = useTranslation();
-  const [loading, setLoading] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const dispatch = useDispatch();
 
-  const dataArr = useSelector(
-    (state: RootState) => state.employees.employeesArr
-  );
+  const { loading, deleteFun, success } = DeleteData("employees");
   const { id, full_name, role, photo, position } = data;
-
-  const deleteData = async (id: string | undefined | number) => {
-    if (id !== undefined) {
-      try {
-        setLoading(true);
-        await deleteEmployee(id)
-          .then(() => {
-            toast.success(t("toast.delete_success"));
-            dispatch(dataValue(dataArr.filter((item) => item.id !== id)));
-          })
-          .catch(() => {
-            toast.error("Something went wrong");
-          });
-      } catch (err) {
-        console.error("Error deleting employee:", err);
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      console.error("id is undefined");
-    }
-  };
 
   const handleDeleteClick = () => {
     setIsModalOpen(true);
   };
+  useEffect(() => {
+    if (success) refresh();
+  }, [success]);
 
   const handleConfirmDelete = () => {
     if (id) {
-      deleteData(id);
+      deleteFun(id);
     }
     setIsModalOpen(false);
   };
 
-  const editFun = (id: string | undefined | number) => {
-    dispatch(setEdit(id));
-    dispatch(setFromModal());
-    dispatch(setMethod("put"));
+  const editFun = (id: any) => {
+    setFormModalFun({
+      id,
+      open: true,
+      role: "edit",
+      refresh: false,
+      title: t("news.modal_edit"),
+    });
   };
 
   const [popupActive, setPopupActive] = useState<boolean>(false);
 
   return (
-    <div className="w-[338px] h-auto bg-white p-6 flex flex-col  border border-gray-200 shadow-sm relative rounded-2xl">
+    <div className="w-[338px] h-[450px] bg-white p-6 flex flex-col  border border-gray-200 shadow-sm relative rounded-2xl">
       <div className="flex justify-end w-full">
         <Ellipsis
           className="cursor-pointer"
@@ -98,9 +75,8 @@ export const Card = ({ data }: Props) => {
         )}
       </div>
       <div className="w-full mb-4">
-      
         <img
-          src={photo? photo :"/user-logo.png"}
+          src={photo ? photo : "/user-logo.png"}
           alt="user photo"
           className="w-full h-[250px] rounded-xl "
         />
@@ -114,7 +90,6 @@ export const Card = ({ data }: Props) => {
       </p>
       <p className="text text-gray-700 mb-1 ">
         {t("form.position")}: {position}
-      
       </p>
 
       <ConfirmationModal

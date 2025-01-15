@@ -3,6 +3,8 @@ import { Logo, sidebarList } from "../../utils/constants";
 import { useTranslation } from "react-i18next";
 import { Select } from "antd";
 import i18n from "i18next";
+import { useDispatch } from "react-redux";
+import { setLangue } from "../../store/booleans";
 const langue = [
   {
     value: "uz",
@@ -13,13 +15,15 @@ const langue = [
     label: "english",
   },
   {
-    value: "ru",
+    value: "de",
     label: "russian",
   },
 ];
 export const Sidebar = () => {
-  const onChangeLangue = (value: string) => {
+  const dispatch = useDispatch();
+  const onChangeLangue = (value: any) => {
     localStorage.setItem("langue", value);
+    dispatch(setLangue(value));
     i18n.changeLanguage(value);
   };
   const { t } = useTranslation();
@@ -44,7 +48,7 @@ export const Sidebar = () => {
       <Select
         className=" h-12 bg-[#4d44b5] absolute bottom-5 w-52"
         onChange={onChangeLangue}
-        defaultValue={localStorage.getItem("langue") ||"uz"}
+        defaultValue={localStorage.getItem("langue") || "uz"}
         options={langue}
       ></Select>
     </article>

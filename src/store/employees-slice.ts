@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ObjType } from "../lib/types";
+import { ObjType } from "../utils/types";
 
 interface Data {
   employeesArr: ObjType[];
@@ -22,5 +22,5 @@ export const employeesSlice = createSlice({
   },
 });
 
-export const { dataValue ,addData} = employeesSlice.actions;
+export const { dataValue, addData } = employeesSlice.actions;
 export default employeesSlice.reducer;

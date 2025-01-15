@@ -1,64 +1,263 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { db, storage } from "./config";
 import {
-  collection,
   addDoc,
-  getDocs,
-  doc,
+  collection,
   deleteDoc,
-  updateDoc,
+  doc,
   getDoc,
+  getDocs,
+  updateDoc,
 } from "firebase/firestore";
-import { ObjType } from "../lib/types";
 import {
   ref as storageRef,
-  uploadBytes,
   getDownloadURL,
+  uploadBytesResumable,
+  ref,
+  uploadBytes,
 } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
-const newDate = Date.now();
-const addEmployee = async (formData: ObjType) => {
+import { db, storage } from "./config";
+import { useEffect, useState } from "react";
+import { message } from "antd";
+
+export function GetFirebaseData<T>(path: string) {
+  const [data, setData] = useState<T | []>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [error, setError] = useState<any>();
+  const fetchingData = async (load: boolean) => {
+    try {
+      if (load) setLoading(true);
+      const getCollection = collection(db, path);
+      const dataRes = await getDocs(getCollection);
+      const filterData = dataRes.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      //   @ts-ignore
+      setData(filterData);
+    } catch (err) {
+      console.error(err);
+      setError(err);
+    } finally {
+      if (load) setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchingData(true);
+  }, []);
+  const refresh = () => {
+    fetchingData(false);
+  };
+  return { data, loading, error, refresh };
+}
+
+export function GetFirebaseDataById(path: string, id: string) {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<any>(null);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const getCollection = doc(db, path, id);
+      const res = await getDoc(getCollection);
+      if (res.exists()) {
+        setData(res.data());
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  return { data, loading };
+}
+
+export function PostFirebaseData(path: string) {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const fetchingData = async (data: any) => {
+    try {
+      setLoading(true);
+      const postCollection = collection(db, path);
+      const res = await addDoc(postCollection, data);
+      console.log(res);
+      setSuccess(true);
+    } catch (err) {
+      console.log(err);
+      setSuccess(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { loading, fetchingData, success };
+}
+
+export function UpdateData(path: string) {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const fetchData = async (id: string, data: any) => {
+    try {
+      setLoading(true);
+      const docRef = doc(db, path, id);
+      const res: any = await updateDoc(docRef, data);
+      console.log(res);
+
+      message.success("update success");
+      setSuccess(true);
+    } catch (err) {
+      message.success("update error");
+    } finally {
+      setLoading(false);
+    }
+  };
+  return { loading, success, fetchData };
+}
+export const uploadFiles = async (
+  files: File[],
+  onProgress?: (progress: number) => void // Progressni kuzatish uchun callback
+): Promise<string[]> => {
+  if (!files || files.length === 0) {
+    throw new Error("Yuklash uchun fayllar tanlanmagan.");
+  }
+
   try {
-    const {
-      full_name,
-      description,
-      education,
-      role,
-      scientific_degree,
-      isTeacher,
-      phone,
-      email,
-      admission_days,
-      photo,
-      position,
-    } = formData;
+    const uploadPromises = files.map((file, index) => {
+      const uniqueFileName = `images/${file.name}-${uuidv4()}`;
+      const imageRef = storageRef(storage, uniqueFileName);
 
-    const employeeData = {
-      full_name,
-      description,
-      education,
-      role,
-      scientific_degree,
-      isTeacher,
-      phone,
-      email,
-      admission_days,
-      photo,
-      position,
-      newDate,
-    };
+      return new Promise<string>((resolve, reject) => {
+        const uploadTask = uploadBytesResumable(imageRef, file);
 
-    const employeesCollectionRef = collection(db, "employees");
-    const docRef = await addDoc(employeesCollectionRef, employeeData);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            if (onProgress) {
+              const progress =
+                ((snapshot.bytesTransferred / snapshot.totalBytes) * 100) /
+                files.length;
+              onProgress(progress + index * (100 / files.length)); // Har bir faylning progressini hisoblash
+            }
+          },
+          (error) => {
+            console.error("Fayl yuklashda xatolik:", error);
+            reject(
+              new Error(`Faylni yuklashda muammo yuz berdi: ${file.name}`)
+            );
+          },
+          async () => {
+            try {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              resolve(downloadURL);
+            } catch (error) {
+              console.error("URL olishda xatolik:", error);
+              reject(new Error(`Fayl URL'ini olishda xatolik: ${file.name}`));
+            }
+          }
+        );
+      });
+    });
 
-    return { id: docRef.id, ...employeeData };
+    const urls = await Promise.all(uploadPromises); // Barcha fayllarni parallel yuklash
+    return urls;
   } catch (error) {
-    console.error("Error adding employee:", error);
-    throw error;
+    console.error("Yuklash jarayonida xatolik:", error);
+    throw new Error("Fayllarni yuklash jarayonida xatolik yuz berdi.");
   }
 };
 
-const uploadFile = async (file: File): Promise<string> => {
+const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100MB
+
+export const uploadVideos = async (
+  files: File[],
+  onProgress?: (progress: number) => void // Progressni kuzatish uchun callback
+): Promise<string[]> => {
+  if (!files || files.length === 0) {
+    throw new Error("Yuklash uchun videolar tanlanmagan.");
+  }
+
+  // Fayllar hajmini tekshirish
+  const oversizedFiles = files.filter((file) => file.size > MAX_VIDEO_SIZE);
+  if (oversizedFiles.length > 0) {
+    const oversizedFileNames = oversizedFiles
+      .map((file) => file.name)
+      .join(", ");
+    throw new Error(
+      `Quyidagi fayllar hajmi 100MB dan oshgan: ${oversizedFileNames}`
+    );
+  }
+
+  try {
+    const uploadPromises = files.map((file, index) => {
+      const uniqueFileName = `videos/${file.name}-${uuidv4()}`; // Fayl nomi va UUID
+      const videoRef = ref(storage, uniqueFileName); // To'g'ri referens yaratiladi
+
+      return new Promise<string>((resolve, reject) => {
+        const uploadTask = uploadBytesResumable(videoRef, file);
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            if (onProgress) {
+              const progress =
+                ((snapshot.bytesTransferred / snapshot.totalBytes) * 100) /
+                files.length;
+              onProgress(progress + index * (100 / files.length)); // Har bir fayl progressini hisoblash
+            }
+          },
+          (error) => {
+            console.error("Video yuklashda xatolik:", error);
+            reject(new Error(`Video yuklashda muammo yuz berdi: ${file.name}`));
+          },
+          async () => {
+            try {
+              const downloadURL = await getDownloadURL(videoRef); // `getDownloadURL` to'g'ri ishlaydi
+              resolve(downloadURL);
+            } catch (error) {
+              console.error("URL olishda xatolik:", error);
+              reject(new Error(`Video URL'ini olishda xatolik: ${file.name}`));
+            }
+          }
+        );
+      });
+    });
+
+    const urls = await Promise.all(uploadPromises); // Barcha videolarni parallel yuklash
+    return urls;
+  } catch (error) {
+    console.error("Yuklash jarayonida xatolik:", error);
+    throw new Error("Videolarni yuklash jarayonida xatolik yuz berdi.");
+  }
+};
+export const refreshUrl = async (filePath: string): Promise<string> => {
+  const fileRef = ref(storage, filePath);
+  return await getDownloadURL(fileRef);
+};
+
+export const DeleteData = (path: string) => {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const deleteFun = async (id: any) => {
+    try {
+      setLoading(true);
+      // Hujjatga murojaat
+      const docRef = doc(db, path, id);
+      // Hujjatni o'chirish
+      await deleteDoc(docRef);
+      setSuccess(true);
+    } catch (error) {
+      setSuccess(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { deleteFun, loading, success };
+};
+
+export const uploadFile = async (file: File): Promise<string> => {
   if (!file) {
     throw new Error("No file selected for upload.");
   }
@@ -71,68 +270,6 @@ const uploadFile = async (file: File): Promise<string> => {
   const downloadURL = await getDownloadURL(imageRef);
 
   return downloadURL;
-};
-
-const getEmployeeById = async (id: string): Promise<ObjType | null> => {
-  try {
-    const employeeDocRef = doc(db, "employees", id);
-    const employeeDocSnap = await getDoc(employeeDocRef);
-
-    if (employeeDocSnap.exists()) {
-      return { id: employeeDocSnap.id, ...employeeDocSnap.data() } as ObjType;
-    } else {
-      return null;
-    }
-  } catch (error) {
-    console.error("Error fetching employee by ID:", error);
-    throw error;
-  }
-};
-const getEmployees = async (): Promise<ObjType[]> => {
-  try {
-    const employeesCollectionRef = collection(db, "employees");
-    const querySnapshot = await getDocs(employeesCollectionRef);
-    const employees: ObjType[] = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...(doc.data() as ObjType),
-    }));
-    return employees;
-  } catch (error) {
-    console.error("Error fetching employees:", error);
-    throw error;
-  }
-};
-
-const deleteEmployee = async (firestoreId: string | number | undefined) => {
-  if (firestoreId === undefined) {
-    throw new Error("firestoreId is required");
-  }
-
-  try {
-    console.log(
-      "Attempting to delete employee with Firestore ID:",
-      firestoreId
-    );
-    const employeeDoc = doc(db, "employees", String(firestoreId));
-    console.log("Document reference:", employeeDoc.path);
-    await deleteDoc(employeeDoc);
-    console.log("Employee deleted:", firestoreId);
-  } catch (error) {
-    console.error("Error deleting employee:", error);
-    throw error;
-  }
-};
-
-const editEmployee = async (id: string, data: any): Promise<void> => {
-  try {
-    console.log("Received ID for edit:", id);
-    const employeeDoc = doc(db, "employees", id);
-    await updateDoc(employeeDoc, data);
-    console.log("Employee updated:", id);
-  } catch (error) {
-    console.error("Error updating employee:", error);
-    throw error;
-  }
 };
 
 interface IHtmlToText {
@@ -173,8 +310,7 @@ const convertTextToHtml = (input: string) => {
 
   return `<div>${html}</div>`;
 };
-
-const createOrUpdateText = async (html: string) => {
+export const createOrUpdateText = async (html: string) => {
   try {
     const data = convertTextToHtml(html);
 
@@ -192,14 +328,4 @@ const createOrUpdateText = async (html: string) => {
     console.error("Error creating or updating text:", error);
     throw error;
   }
-};
-
-export {
-  addEmployee,
-  getEmployees,
-  deleteEmployee,
-  editEmployee,
-  createOrUpdateText,
-  uploadFile,
-  getEmployeeById,
 };

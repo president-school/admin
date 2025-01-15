@@ -1,5 +1,5 @@
 import { UseFormRegister } from "react-hook-form";
-import { Inputs } from "../../lib/types";
+import { Inputs } from "../../utils/types";
 
 interface Props {
   type: string;
