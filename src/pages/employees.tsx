@@ -1,38 +1,61 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { PlusCircleIcon, SearchIcon } from "lucide-react";
+import { Loader, PlusCircleIcon, SearchIcon } from "lucide-react";
 import { Card } from "../components/ui";
-import { useDispatch, useSelector } from "react-redux";
-import { ObjType } from "../lib/types";
-import { RootState } from "../store/store";
-import { setFromModal, setMethod } from "../store/booleans";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { EmployeesType, ObjType } from "../utils/types";
+
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDebounce } from "../hooks/use-debauce";
-import MyLoader from "../components/ui/card-loader";
+
+import { GetFirebaseData } from "../firebase/services";
+import { RootState } from "../store/store";
+import { setFormModalFun } from "../utils/dispatch";
 
 export const Employees = () => {
-  const dispatch = useDispatch();
-  const data = useSelector((state: RootState) => state.employees.employeesArr);
-  const loading = useSelector((state: RootState) => state.booleans.loading);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const searchValue = useDebounce(searchTerm, 500);
   const { t } = useTranslation();
   const addEmployees = () => {
-    dispatch(setFromModal());
-    dispatch(setMethod("post"));
+    setFormModalFun({
+      role: "add",
+      id: "",
+      open: true,
+      refresh: false,
+      title: t("employees.modal_add"),
+    });
   };
-  
+  const formDataAction = useSelector(
+    (state: RootState) => state.booleans.fromModal
+  );
+  const {
+    data: testData,
+    loading,
+    refresh,
+  } = GetFirebaseData<EmployeesType[]>("employees");
+  useEffect(() => {
+    if (formDataAction.refresh) {
+      refresh();
+    }
+  }, [formDataAction.refresh]);
+  const langues: "uz" | "de" | "en" = useSelector(
+    (state: RootState) => state.booleans.langue
+  );
+  const filter = testData.map((item) => {
+    return { ...item[`${langues}`], id: item.id };
+  });
 
-  const filteredData = data.filter((employee: ObjType) =>
+  const filteredData = filter.filter((employee: ObjType) =>
     employee.full_name.toLowerCase().startsWith(searchValue.toLowerCase())
   );
-  const sortData = filteredData.sort((a: any, b: any) => a.newDate - b.newDate);
+  const sortData = filteredData.sort((a: any, b: any) => b.newDate - a.newDate);
 
-  let newArray: ObjType[] = []
-  sortData.forEach(item => {
-    let index = Number(item.number);
-    newArray.splice(index-1, 0, item);
+  let newArray: ObjType[] = [];
+  sortData.forEach((item) => {
+    let index = Number(item.NewDate);
+    newArray.splice(index - 1, 0, item);
   });
+
+
   return (
     <main className="w-full p-10">
       <h1 className="font-semibold text-[36px] text-[#303972] mb-4">
@@ -58,19 +81,21 @@ export const Employees = () => {
           {t("employees.add")}
         </button>
       </div>
-      <section className={`flex ${sortData.length > 0 ? 'gap-10 flex-wrap h-[calc(100vh-200px)] overflow-auto' : 'items-center justify-center h-[400px]'}`}>
-        {loading &&
-          new Array(3).fill(0).map((_, index) => <MyLoader key={index} />)
-        } 
+      <section className="flex gap-10 flex-wrap h-[calc(100vh-200px)] overflow-auto">
+        {loading && (
+          <div className=" w-full flex justify-center items-center">
+            <Loader className="animate-spin" size={40} />
+          </div>
+        )}
         {loading ||
-          newArray.length > 0
-          ?
-            newArray.map((item: ObjType) => <Card key={item.id} data={item} />)
-          :
-            <h1 className="font-semibold text-[36px] text-[#303972] mb-4">
-              {t("noemployees")}
-            </h1>
-        }
+          newArray.map((item: ObjType) => (
+            <Card key={item.id} data={item} refresh={refresh} />
+          ))}
+        {!loading && newArray.length == 0 && (
+          <div className="w-full flex justify-center items-center">
+            <h2 className="text-3xl">{t("employees.not_found")}</h2>
+          </div>
+        )}
       </section>
     </main>
   );

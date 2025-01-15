@@ -1,46 +1,47 @@
-import { Button, Form } from "antd";
-import { createOrUpdateText } from "../firebase/services";
+import { Button } from "antd";
+
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
-import TextArea from "antd/es/input/TextArea";
-import { toast } from "react-toastify";
+
+import { GetFirebaseData } from "../firebase/services";
+import { AcceptanceType } from "../utils/types";
+import { AcceptanceModal } from "../utils/dispatch";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 export const Acceptance = () => {
   const { t } = useTranslation();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [form] = Form.useForm();
-
-  const onSubmit = async (values: { description: string }) => {
-    try {
-      setLoading(true);
-      await createOrUpdateText(values.description);
-      toast.success(t("toast.textAria_success"));
-    } catch (err) {
-      console.log(err);
-      toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
-      form.resetFields();
+  const modalAction = useSelector(
+    (state: RootState) => state.booleans.acceptanceModal
+  );
+  const { data, refresh } = GetFirebaseData<AcceptanceType[]>("text");
+  useEffect(() => {
+    if (modalAction.refresh) {
+      refresh();
     }
-  };
-
+  }, [modalAction]);
   return (
     <main className="w-full p-10">
-      <Form form={form} layout="vertical" onFinish={onSubmit}>
-        <Form.Item
-          name="description"
-          label={t("acceptance.desc")}
-          rules={[{ required: true, message: "Please input the description!" }]}
+      <div className="flex justify-end mb-5">
+        <Button
+          type="primary"
+          onClick={() =>
+            AcceptanceModal({
+              text: data[0].text,
+              open: true,
+              refresh: false,
+            })
+          }
         >
-          <TextArea placeholder={t("acceptance.input")} rows={4} />
-        </Form.Item>
-
-        <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
+          {t("news.modal_edit")}
+        </Button>
+      </div>
+      <div
+        className=" text-justify"
+        dangerouslySetInnerHTML={{
+          __html: data[0]?.text,
+        }}
+      ></div>
     </main>
   );
 };

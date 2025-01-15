@@ -1,26 +1,49 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  AcceptanceModalAction,
+  FormModalType,
+  langueType,
+  NewsType,
+} from "../utils/types";
+
 type State = {
-  fromModal: boolean;
+  fromModal: FormModalType;
   fetching: boolean;
   edit: string | undefined | number;
   method: string;
   loading: boolean;
-  admin: string
+  admin: string;
+  langue: langueType | any;
+  newsModal: NewsType;
+  acceptanceModal: AcceptanceModalAction;
 };
 const initialState: State = {
-  fromModal: false,
+  fromModal: { id: "", open: false, role: "add", refresh: false, title: "" },
+  acceptanceModal: { text: "", open: false, refresh: false },
+  newsModal: {
+    id: "",
+    open: false,
+    role: "add",
+    refresh: false,
+    path: "",
+    title: "",
+  },
   fetching: false,
   edit: 0,
   method: "post",
   loading: false,
-  admin: sessionStorage?.getItem('userRole') || '',
+  admin: localStorage?.getItem("userRole") || "",
+  langue: localStorage?.getItem("langue") || "uz",
 };
 const booleansSlice = createSlice({
   name: "booleans",
   initialState,
   reducers: {
-    setFromModal: (state) => {
-      state.fromModal = !state.fromModal;
+    setFromModal: (state, action: PayloadAction<FormModalType>) => {
+      state.fromModal = action.payload;
+    },
+    setNewsModal: (state, action: PayloadAction<NewsType>) => {
+      state.newsModal = action.payload;
     },
     setFetching: (state) => {
       state.fetching = !state.fetching;
@@ -36,9 +59,27 @@ const booleansSlice = createSlice({
     },
     setAdmin: (state, action: PayloadAction<string>) => {
       state.admin = action.payload;
-    }
+    },
+    setLangue: (state, action: PayloadAction<langueType>) => {
+      state.langue = action.payload;
+    },
+    setAcceptanceModal: (
+      state,
+      action: PayloadAction<AcceptanceModalAction>
+    ) => {
+      state.acceptanceModal = action.payload;
+    },
   },
 });
-export const { setFromModal, setFetching, setEdit, setMethod, setLoading, setAdmin } =
-  booleansSlice.actions;
+export const {
+  setFromModal,
+  setFetching,
+  setEdit,
+  setMethod,
+  setLoading,
+  setAdmin,
+  setLangue,
+  setNewsModal,
+  setAcceptanceModal,
+} = booleansSlice.actions;
 export default booleansSlice.reducer;

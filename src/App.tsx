@@ -1,111 +1,45 @@
-/* eslint-disable prefer-const */
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import i18n from "i18next";
-import { FormModal, Sidebar } from "./components/shared";
-import { Employees, Home, Acceptance, Login } from "./pages";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { dataValue } from "./store/employees-slice";
-import { RootState } from "./store/store";
-import { getEmployees } from "./firebase/services";
+
 import { initReactI18next } from "react-i18next";
 import translationEn from "./locale/translationEn";
 import translationUz from "./locale/translationUz";
 import translationRu from "./locale/translationRu";
-import { setLoading } from "./store/booleans";
+
+import { Layout } from "./layouts/layout";
+import { routes } from "./utils/routes";
+import { Login } from "./pages";
 
 
 
 function App() {
-  let store = useSelector((state: RootState) => state.booleans);
-  const { admin } = store;
-  const navigate = useNavigate();
   const langue = localStorage.getItem("langue");
-  const dispatch = useDispatch();
-  const FormModalActive = useSelector(
-    (state: RootState) => state.booleans.fromModal
-  );
+
   i18n.use(initReactI18next).init({
     resources: {
       en: { translation: translationEn },
       uz: { translation: translationUz },
-      ru: { translation: translationRu },
+      de: { translation: translationRu },
     },
     lng: `${langue || "uz"}`,
     fallbackLng: `${langue || "uz"}`,
   });
-
-  const fetching = async () => {
-    try {
-      dispatch(setLoading(true));
-      const data = await getEmployees();
-      dispatch(dataValue(data));
-    } catch (err) {
-      console.log(err);
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-  useEffect(() => {
-    fetching();
-  }, []);
-
-  let inactivityTime = 0;
-  const inactivityLimit = 600000;
-
-  function resetInactivityTimer() {
-    inactivityTime = 0;
+  if (typeof global === "undefined") {
+    window.global = window;
   }
 
-  window.addEventListener("mousemove", resetInactivityTimer);
-  window.addEventListener("keypress", resetInactivityTimer);
-  window.addEventListener("click", resetInactivityTimer);
-
-  setInterval(() => {
-    inactivityTime += 1000;
-    if (inactivityTime >= inactivityLimit) {
-      sessionStorage.removeItem("userRole");
-      navigate("/login");
-    }
-  }, 1000);
-
   return (
-    <div className="flex h-screen w-full relative">
-      {admin && <Sidebar />}
-      {FormModalActive && <FormModal />}
-      <Routes>
-        <Route path="/" element={admin ? <Home /> : <Navigate to="/login" />} />
-        <Route path="/login" element={admin ? <Home /> : <Login />} />
-        <Route
-          path="/employees"
-          element={admin ? <Employees /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/acceptance"
-          element={admin ? <Acceptance /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="*"
-          element={
-            admin ? (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  fontSize: "36px",
-                  fontWeight: "900",
-                }}
-              >
-                <p>Not founded page</p>
-              </div>
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {routes.map((item) => {
+          const Component = item.component;
+          return (
+            <Route key={item.id} path={item.path} element={<Component />} />
+          );
+        })}
+      </Route>
+      <Route path="/login" element={<Login />} />
+    </Routes>
   );
 }
 
