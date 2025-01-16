@@ -2,7 +2,7 @@ const translationEn = {
   employee: "Employee",
   success: "You have successfully registered!",
   fail: "Incorrect login or password",
-  submit:'submit',
+  submit: "submit",
   sidebar: {
     home: "Home",
     employees: "Employees",
@@ -36,6 +36,8 @@ const translationEn = {
     not_found: "There is no news :(",
     modal_add: "Add news",
     modal_edit: "Edit",
+    video_add: "Upload video",
+    video_delete: "delete video",
   },
   achievements: {
     title: "Achievements",
@@ -91,6 +93,7 @@ const translationEn = {
     textAria_success: "info Added successfully",
     form_err: "Complete information in 3 languages ​​is required!!",
     videoSize: "The size of the video should not be larger than 100mb",
+    imgErr: "The file is not in image format",
   },
 };
 

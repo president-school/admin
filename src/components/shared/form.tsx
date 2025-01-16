@@ -2,7 +2,7 @@ import { Button, Form, Input, message, Select, Upload } from "antd";
 import { AddEmployeeFormData } from "../../utils/types";
 import { useState, useEffect } from "react";
 
-import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
 
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next";
@@ -19,6 +19,7 @@ import { RootState } from "../../store/store";
 import { filterFormValue } from "../../utils/mapdata";
 import InputMask from "react-input-mask";
 import { X } from "lucide-react";
+import { RcFile } from "antd/es/upload";
 export const ModalForm = () => {
   const [fileList, setFileList] = useState<any[]>([]);
   const [isVisible, setIsVisible] = useState(false);
@@ -176,6 +177,30 @@ export const ModalForm = () => {
       setValidateErr((item) => [...item, field.slice(field.length - 2)]);
     }
   };
+  const isImage = (file: RcFile): boolean => {
+    const imageTypes = ["image/jpeg", "image/png", "image/gif"];
+    return imageTypes.includes(file.type);
+  };
+
+  const props = {
+    onRemove: (file: any) => {
+      setFileList((prev) => prev.filter((item) => item.uid !== file.uid));
+    },
+    beforeUpload: (file: RcFile) => {
+      if (!isImage(file)) {
+        message.error(t("toast.imgErr"));
+        return Upload.LIST_IGNORE;
+      }
+      if (file.size / 1024 / 1024 > 100) {
+        message.error(t("toast.videSize"));
+        return false;
+      }
+      setFileList((prev) => [...prev, file]);
+      return false; // Автоматик юклашни олдини олади
+    },
+    fileList,
+    multiple: true,
+  };
   return (
     <div
       className={`fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 transition-opacity duration-100 z-10 ${
@@ -187,11 +212,7 @@ export const ModalForm = () => {
           isVisible ? "translate-y-0" : "-translate-y-10"
         }`}
       >
-        <div className="w-full flex justify-end">
-          <div onClick={handleClose} className="w-max cursor-pointer">
-            <CloseCircleOutlined className="pointer-events-none text-4xl" />
-          </div>
-        </div>
+        <div className="w-full flex justify-end"></div>
         <Form
           form={form}
           autoComplete="off"
@@ -318,16 +339,17 @@ export const ModalForm = () => {
           </Form.Item>
 
           <Upload
+            {...props}
             listType="picture"
-            beforeUpload={() => false}
+            // beforeUpload={() => false}
             onChange={handleFileChange}
             fileList={fileList}
-            disabled={fileList.length > 0}
+            disabled={imgLoading}
           >
             <Button
               icon={<UploadOutlined />}
               className="w-[620px]"
-              disabled={fileList.length > 0}
+              disabled={fileList.length > 0 || photos?.length > 0}
             >
               {t("form.photo")}
             </Button>

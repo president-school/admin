@@ -36,6 +36,8 @@ const translationUz = {
     not_found: "Yangilik mavjud emas :(",
     modal_add: "Yangilik qo'shish  ",
     modal_edit: "Tahrirlash",
+    video_add:'Video yukash',
+    video_delete:'Videoni olib tashlash'
   },
   achievements: {
     title: "Yutuqlar",
@@ -93,6 +95,7 @@ const translationUz = {
     textAria_success: "malimot Muvaffaqiyatli qo'shildi",
     form_err: "Malimotlarni 3ta tilda  to'liq kiritish shart !!",
     videoSize: "Video hajmi 100mb dan katta bulmasligi kerak",
+    imgErr:'Fayl rasm Formatda emas'
   },
 };
 
