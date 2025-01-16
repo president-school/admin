@@ -41,7 +41,7 @@ export const News = () => {
     let index = Number(item.date);
     newArray.splice(index - 1, 0, item);
   });
-  console.log(filteredData);
+
   return (
     <main className="w-full p-10">
       <h1 className="font-semibold text-[36px] text-[#303972] mb-4">

@@ -4,11 +4,7 @@ import { setNewsModalFun } from "../../utils/dispatch";
 import { Button, Form, message, Progress, Upload } from "antd";
 import LanguageForm from "../ui/index,";
 import { useTranslation } from "react-i18next";
-import {
-  
-  DeleteOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, UploadOutlined } from "@ant-design/icons";
 import {
   GetFirebaseDataById,
   PostFirebaseData,
@@ -58,6 +54,7 @@ export const AddNews = () => {
       description_en: data?.en.description,
     };
   };
+
 
   useEffect(() => {
     if (newsModalAction.role === "edit")
@@ -146,11 +143,11 @@ export const AddNews = () => {
     },
     beforeUpload: (file: RcFile) => {
       if (!isImage(file)) {
-        message.error(`Файл "${file.name}" расм форматида эмас.`);
+        message.error(t('toast.imgErr'));
         return false;
       }
       if (file.size / 1024 / 1024 > 100) {
-        message.error(`Файл "${file.name}" 100MB дан ошмаслиги керак.`);
+        message.error(t('toast.videSize'));
         return false;
       }
       setFileList((prev) => [...prev, file]);
@@ -247,23 +244,23 @@ export const AddNews = () => {
       en: {
         title: data.title_en,
         description: data.description_en,
-        images: imgUrls,
+        images: imgUrls?.length == 0 ? photos : imgUrls,
         videos: video,
-        date,
+        date: formData?.de?.date ? formData?.de?.date : date,
       },
       de: {
         title: data.title_de,
         description: data.description_de,
-        images: imgUrls,
+        images: imgUrls?.length == 0 ? photos : imgUrls,
         videos: video,
-        date,
+        date: formData?.de?.date ? formData?.de?.date : date,
       },
       uz: {
         title: data.title_uz,
         description: data.description_uz,
-        images: imgUrls,
+        images: imgUrls?.length == 0 ? photos : imgUrls,
         videos: video,
-        date,
+        date: formData?.de?.date ? formData?.de?.date : date,
       },
     };
     if (newsModalAction.role == "add") fetchingData(filterData);
@@ -346,7 +343,7 @@ export const AddNews = () => {
                   name="img"
                   rules={[
                     {
-                      required: true,
+                      required: photos?.length === 0,
                       message: t("form.validation.img"),
                     },
                   ]}
@@ -409,7 +406,7 @@ export const AddNews = () => {
                         : false
                     }
                   >
-                    Видео юклаш
+                   {t('news.video_add')}
                   </Button>
                 </Upload>
                 {(initialVideo && initialVideo?.length > 0) ||
@@ -423,7 +420,7 @@ export const AddNews = () => {
                         type="primary"
                         disabled={videoUploading}
                       >
-                        Файлни ўчириш
+                        {t('news.video_delete')}
                       </Button>
                     </div>
                   ))}
@@ -433,7 +430,7 @@ export const AddNews = () => {
                     className="bg-red-500 mt-2"
                     onClick={() => setInitialVideo("")}
                   >
-                    videoni o'chirish
+                 {t('news.video_delete')}
                   </Button>
                 )}
                 {progress > 0 && (

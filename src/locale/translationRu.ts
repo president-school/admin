@@ -36,6 +36,8 @@ const translationRu = {
     not_found: "новостей нет :(",
     modal_add: "Добавить новость",
     modal_edit: "Pедактировать",
+     video_add:'Загрузка видео',
+    video_delete:'Удалить видео'
   },
   acceptance: {
     desc: "описание",
@@ -90,6 +92,7 @@ const translationRu = {
     textAria_success: "информация успешно добавлена",
     form_err: "Требуется полная информация на 3-х языках!!",
     videoSize: "Размер видео не должен быть больше 100мб.",
+    imgErr:'Файл не в формате изображения'
   },
 };
 
