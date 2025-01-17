@@ -1,7 +1,7 @@
 import { Button, Form } from "antd";
 import { X } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { createOrUpdateText, } from "../../firebase/services";
+import { createOrUpdateText } from "../../firebase/services";
 
 import { toast } from "react-toastify";
 import { AcceptanceModal } from "../../utils/dispatch";
@@ -22,7 +22,6 @@ export const AcceptanceEdit = () => {
     return tempDiv.textContent || tempDiv.innerText || "";
   };
   const plainText = stripHTML(acceptanceData.text);
-  console.log(plainText);
 
   const [form] = Form.useForm();
 
