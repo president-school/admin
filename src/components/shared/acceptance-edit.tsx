@@ -21,7 +21,7 @@ export const AcceptanceEdit = () => {
     tempDiv.innerHTML = htmlString;
     return tempDiv.textContent || tempDiv.innerText || "";
   };
-  const plainText = stripHTML(acceptanceData.text);
+
 
   const [form] = Form.useForm();
 
