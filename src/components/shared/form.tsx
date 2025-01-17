@@ -72,7 +72,7 @@ export const ModalForm = () => {
   }
   const [imgLoading, setImgLoading] = useState(false);
   const onSubmit = async (dataInfo: AddEmployeeFormData) => {
-    let photoURL = photos ? photos[0] : "";
+    let photoURL = photos ? photos : "";
 
     if (fileList.length > 0) {
       const file = fileList[0].originFileObj;
