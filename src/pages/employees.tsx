@@ -54,6 +54,7 @@ export const Employees = () => {
     let index = Number(item.NewDate);
     newArray.splice(index - 1, 0, item);
   });
+console.log({sortData});
 
 
   return (
