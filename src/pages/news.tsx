@@ -36,6 +36,7 @@ export const News = () => {
   );
   const sortData = filteredData.sort((a: any, b: any) => a.date - b.date);
 
+
   let newArray: NewsData[] = [];
   sortData.forEach((item) => {
     let index = Number(item.date);
@@ -89,7 +90,7 @@ export const News = () => {
                 key={item.id}
                 title={item.title}
                 description={item.description}
-                img={item.images ? item.images[0] : ""}
+                img={item.images ? item?.images[0] : ""}
                 id={item.id}
                 refresh={refresh}
                 path="news"

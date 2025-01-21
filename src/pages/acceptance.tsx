@@ -14,7 +14,15 @@ export const Acceptance = () => {
   const modalAction = useSelector(
     (state: RootState) => state.booleans.acceptanceModal
   );
+  const langues: "uz" | "de" | "en" = useSelector(
+    (state: RootState) => state.booleans.langue
+  );
   const { data, refresh } = GetFirebaseData<AcceptanceType[]>("text");
+  const filter = data.map((item: any) => {
+    return { ...item.text[`${langues}`], id: item.id };
+  });
+  // console.log(filter[0].text);
+
   useEffect(() => {
     if (modalAction.refresh) {
       refresh();
@@ -27,7 +35,7 @@ export const Acceptance = () => {
           type="primary"
           onClick={() =>
             AcceptanceModal({
-              text: data[0].text,
+              text: "",
               open: true,
               refresh: false,
             })
@@ -39,7 +47,7 @@ export const Acceptance = () => {
       <div
         className=" text-justify"
         dangerouslySetInnerHTML={{
-          __html: data[0]?.text,
+          __html: filter[0]?.text,
         }}
       ></div>
     </main>

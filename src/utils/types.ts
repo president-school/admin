@@ -77,7 +77,9 @@ export interface AddEmployeeFormData {
 export type langueType = "de" | "en" | "uz";
 export interface AcceptanceType {
   id: string;
-  text: any;
+  uz: { text: string };
+  de: { text: string };
+  en: { text: string };
 }
 export interface AcceptanceModalAction {
   text: any;

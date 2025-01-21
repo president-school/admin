@@ -1,19 +1,24 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/auth-context";
-import { Sidebar } from "lucide-react";
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { user } = useAuth();
+  const location = useLocation();
+
+  // Redirect logic for unauthenticated users
+  useEffect(() => {
+    if (!user) {
+      console.log("Redirecting to login...");
+    }
+  }, [user]);
+
   return user ? (
-    <>
-      <Sidebar />
-      {children}
-    </>
+    <>{children}</>
   ) : (
-    <Navigate to="/login" />
+    <Navigate to="/login" state={{ from: location }} replace />
   );
 };
 

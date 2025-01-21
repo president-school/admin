@@ -310,9 +310,27 @@ const convertTextToHtml = (input: string) => {
 
   return `<div>${html}</div>`;
 };
-export const createOrUpdateText = async (html: string) => {
+export const createOrUpdateText = async (
+  de: string,
+  en: string,
+  uz: string
+) => {
   try {
-    const data = convertTextToHtml(html);
+    const text_de = convertTextToHtml(de);
+    const text_en = convertTextToHtml(en);
+    const text_uz = convertTextToHtml(uz);
+    const data = {
+      uz: {
+        text: text_uz,
+      },
+      de: {
+        text: text_de,
+      },
+      en: {
+        text: text_en,
+      },
+    };
+    console.log(data);
 
     const textCollectionRef = collection(db, "text");
     const querySnapshot = await getDocs(textCollectionRef);
