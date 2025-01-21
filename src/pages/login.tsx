@@ -2,7 +2,7 @@ import { FieldType } from "../utils/types";
 import { useNavigate } from "react-router-dom";
 
 import "react-toastify/dist/ReactToastify.css";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { ToastContainer } from "react-toastify";
 
 import { login } from "../firebase/auth";
@@ -16,7 +16,7 @@ export const Login = () => {
       await login(values.email, values.password);
       navigate("/");
     } catch (error) {
-      alert("Login failed");
+      message.error("Incorrect email or password");
     } finally {
       setLoading(false);
     }

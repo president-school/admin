@@ -47,6 +47,8 @@ export const Employees = () => {
   const filteredData = filter.filter((employee: ObjType) =>
     employee.full_name.toLowerCase().startsWith(searchValue.toLowerCase())
   );
+  console.log(testData);
+
   const sortData = filteredData.sort((a: any, b: any) => b.newDate - a.newDate);
 
   let newArray: ObjType[] = [];

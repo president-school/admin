@@ -16,6 +16,7 @@ type State = {
   langue: langueType | any;
   newsModal: NewsType;
   acceptanceModal: AcceptanceModalAction;
+  userEmail: string;
 };
 const initialState: State = {
   fromModal: { id: "", open: false, role: "add", refresh: false, title: "" },
@@ -34,6 +35,7 @@ const initialState: State = {
   loading: false,
   admin: localStorage?.getItem("userRole") || "",
   langue: localStorage?.getItem("langue") || "uz",
+  userEmail: "",
 };
 const booleansSlice = createSlice({
   name: "booleans",
@@ -63,6 +65,10 @@ const booleansSlice = createSlice({
     setLangue: (state, action: PayloadAction<langueType>) => {
       state.langue = action.payload;
     },
+    setUserEmail: (state, action: PayloadAction<string>) => {
+      state.userEmail = action.payload;
+    },
+
     setAcceptanceModal: (
       state,
       action: PayloadAction<AcceptanceModalAction>
@@ -81,5 +87,6 @@ export const {
   setLangue,
   setNewsModal,
   setAcceptanceModal,
+  setUserEmail
 } = booleansSlice.actions;
 export default booleansSlice.reducer;

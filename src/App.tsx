@@ -9,8 +9,7 @@ import translationRu from "./locale/translationRu";
 import { Layout } from "./layouts/layout";
 import { routes } from "./utils/routes";
 import { Login } from "./pages";
-
-
+import PrivateRoute from "./layouts/private-routes";
 
 function App() {
   const langue = localStorage.getItem("langue");
@@ -34,7 +33,15 @@ function App() {
         {routes.map((item) => {
           const Component = item.component;
           return (
-            <Route key={item.id} path={item.path} element={<Component />} />
+            <Route
+              key={item.id}
+              path={item.path}
+              element={
+                <PrivateRoute>
+                  <Component />
+                </PrivateRoute>
+              }
+            />
           );
         })}
       </Route>
