@@ -45,7 +45,7 @@ export const Acceptance = () => {
         </Button>
       </div>
       <div
-        className=" text-justify"
+        className="text-justify h-[91vh] overflow-x-scroll"
         dangerouslySetInnerHTML={{
           __html: filter[0]?.text,
         }}

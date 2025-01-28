@@ -37,7 +37,8 @@ const translationUz = {
     modal_add: "Yangilik qo'shish  ",
     modal_edit: "Tahrirlash",
     video_add:'Video yukash',
-    video_delete:'Videoni olib tashlash'
+    video_delete:'Videoni olib tashlash',
+    checkedVideo:'tanlangan fayl'
   },
   achievements: {
     title: "Yutuqlar",

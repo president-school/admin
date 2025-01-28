@@ -38,6 +38,7 @@ const translationEn = {
     modal_edit: "Edit",
     video_add: "Upload video",
     video_delete: "delete video",
+    checkedVideo:'selected file'
   },
   achievements: {
     title: "Achievements",

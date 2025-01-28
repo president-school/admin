@@ -5,6 +5,9 @@ import { AddNews } from "../components/shared/add-news";
 import { FormModal, Sidebar } from "../components/shared";
 import { AcceptanceEdit } from "../components/shared/acceptance-edit";
 
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { setUserFun } from "../utils/dispatch";
+import { UserData } from "../utils/types";
 export const Layout = () => {
   const FormModalActive = useSelector(
     (state: RootState) => state.booleans.fromModal
@@ -15,6 +18,19 @@ export const Layout = () => {
   const acceptanceModal = useSelector(
     (state: RootState) => state.booleans.acceptanceModal
   );
+
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const data: UserData = {
+        email: user?.email ? user.email : "",
+        role: user.email === "adimin@gmail.com" ? "admin" : "superAdmin",
+      };
+      setUserFun(data);
+      // ...
+    } else {
+    }
+  });
   return (
     <div className="flex h-screen w-full relative">
       <Sidebar />

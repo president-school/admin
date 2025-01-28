@@ -4,13 +4,17 @@ import { useTranslation } from "react-i18next";
 import { DeleteData } from "../../firebase/services";
 import ConfirmationModal from "./confirmation-modal";
 import { setNewsModalFun } from "../../utils/dispatch";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { deleteObject, getStorage, ref } from "firebase/storage";
 interface Props {
   id: string;
   title: string;
   description: string;
-  img: string;
+  img: any;
   refresh: () => void;
   path: string;
+  admin: string[];
 }
 
 export const NewsCard = ({
@@ -20,11 +24,29 @@ export const NewsCard = ({
   description,
   refresh,
   path,
+  admin,
 }: Props) => {
   const [popupActive, setPopupActive] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { t } = useTranslation();
   const { loading, deleteFun, success } = DeleteData(path);
+  const userData = useSelector((state: RootState) => state.booleans.user);
+  const storageDB = getStorage();
+
+  const deletePhotoDB = async (paths: string[]) => {
+    try {
+      // `Promise.all` orqali barcha fayllarni bir vaqtning o'zida o'chiramiz
+      await Promise.all(
+        paths.map(async (item) => {
+          const fileRef = ref(storageDB, item);
+          await deleteObject(fileRef); // Faylni o'chirish
+        })
+      );
+      console.log("All files deleted successfully");
+    } catch (error) {
+      console.error("Error deleting files:", error);
+    }
+  };
   useEffect(() => {
     if (success) refresh();
   }, [success]);
@@ -35,18 +57,22 @@ export const NewsCard = ({
   const handleConfirmDelete = () => {
     if (id) {
       deleteFun(id);
+      deletePhotoDB(img);
     }
     setIsModalOpen(false);
   };
+
   return (
     <>
       <div className="w-96 h-[450px] bg-white shadow-md flex flex-col relative p-4 rounded-lg cursor-pointer">
         <div className="flex justify-end w-full">
-          <Ellipsis
-            className="cursor-pointer"
-            onClick={() => setPopupActive((c) => !c)}
-            style={{ color: "#606060" }}
-          />
+          {admin?.includes(userData.role) && (
+            <Ellipsis
+              className="cursor-pointer"
+              onClick={() => setPopupActive((c) => !c)}
+              style={{ color: "#606060" }}
+            />
+          )}
           {popupActive && (
             <div className="absolute top-14 right-4 p-4 bg-gray-50 border border-gray-200 rounded-md shadow-md">
               <div
@@ -58,7 +84,7 @@ export const NewsCard = ({
                     role: "edit",
                     refresh: false,
                     path,
-                    title:t('news.modal_edit')
+                    title: t("news.modal_edit"),
                   })
                 }
               >
@@ -80,7 +106,7 @@ export const NewsCard = ({
         </div>
         <div className="w-full mb-4">
           <img
-            src={img ? img : "/no-picture.jpg"}
+            src={img ? img[0] : "/no-picture.jpg"}
             alt="user photo"
             className="w-full h-[200px] rounded-xl "
           />

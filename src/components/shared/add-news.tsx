@@ -15,7 +15,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 
 import {
+  deleteObject,
   getDownloadURL,
+  getStorage,
   ref,
   uploadBytes,
   uploadBytesResumable,
@@ -39,9 +41,20 @@ export const AddNews = () => {
     newsModalAction.id
   );
   const [photos, setPhotos] = useState<string[] | undefined>([]);
+  const storageDB = getStorage();
   const [initialVideo, setInitialVideo] = useState<string | undefined>(
     undefined
   );
+  const deletePhotoDB = async (path: string) => {
+    setInitialVideo("");
+    const fileRef = ref(storageDB, path);
+    try {
+      await deleteObject(fileRef); // Faylni o'chirish
+      console.log("File deleted successfully");
+    } catch (error) {
+      console.error("Error deleting file:", error);
+    }
+  };
   const formInitialValue = (data: NewsResData | null) => {
     setPhotos(data?.uz.images);
     setInitialVideo(data?.uz.videos);
@@ -54,7 +67,6 @@ export const AddNews = () => {
       description_en: data?.en.description,
     };
   };
-
 
   useEffect(() => {
     if (newsModalAction.role === "edit")
@@ -143,11 +155,11 @@ export const AddNews = () => {
     },
     beforeUpload: (file: RcFile) => {
       if (!isImage(file)) {
-        message.error(t('toast.imgErr'));
+        message.error(t("toast.imgErr"));
         return false;
       }
       if (file.size / 1024 / 1024 > 100) {
-        message.error(t('toast.videSize'));
+        message.error(t("toast.videSize"));
         return false;
       }
       setFileList((prev) => [...prev, file]);
@@ -227,10 +239,11 @@ export const AddNews = () => {
   // ------------------------------submit form
 
   const deletePhoto = (photo: string) => {
+    deletePhotoDB(photo);
     const filterPhoto = photos?.filter((item) => item !== photo);
     setPhotos(filterPhoto);
   };
-
+  const userData = useSelector((state: RootState) => state.booleans.user);
   const submit = async (data: AddNewType) => {
     const imgUrls = await handleUpload();
     const video = await handleVideoUpload();
@@ -247,6 +260,7 @@ export const AddNews = () => {
         images: imgUrls?.length == 0 ? photos : imgUrls,
         videos: video,
         date: formData?.de?.date ? formData?.de?.date : date,
+        role: ["superAdmin", userData.role],
       },
       de: {
         title: data.title_de,
@@ -254,6 +268,7 @@ export const AddNews = () => {
         images: imgUrls?.length == 0 ? photos : imgUrls,
         videos: video,
         date: formData?.de?.date ? formData?.de?.date : date,
+        role: ["superAdmin", userData.role],
       },
       uz: {
         title: data.title_uz,
@@ -261,6 +276,7 @@ export const AddNews = () => {
         images: imgUrls?.length == 0 ? photos : imgUrls,
         videos: video,
         date: formData?.de?.date ? formData?.de?.date : date,
+        role: ["superAdmin", userData.role],
       },
     };
     if (newsModalAction.role == "add") fetchingData(filterData);
@@ -406,13 +422,13 @@ export const AddNews = () => {
                         : false
                     }
                   >
-                   {t('news.video_add')}
+                    {t("news.video_add")}
                   </Button>
                 </Upload>
                 {(initialVideo && initialVideo?.length > 0) ||
                   (selectedFile && (
                     <div style={{ marginTop: "20px" }}>
-                      <p>Танланган файл: {selectedFile.name}</p>
+                      <p>{t('news.checkedVideo')} {selectedFile.name}</p>
                       <Button
                         icon={<DeleteOutlined />}
                         onClick={handleRemove}
@@ -420,7 +436,7 @@ export const AddNews = () => {
                         type="primary"
                         disabled={videoUploading}
                       >
-                        {t('news.video_delete')}
+                        {t("news.video_delete")}
                       </Button>
                     </div>
                   ))}
@@ -428,9 +444,9 @@ export const AddNews = () => {
                   <Button
                     type="primary"
                     className="bg-red-500 mt-2"
-                    onClick={() => setInitialVideo("")}
+                    onClick={() => deletePhotoDB(initialVideo)}
                   >
-                 {t('news.video_delete')}
+                    {t("news.video_delete")}
                   </Button>
                 )}
                 {progress > 0 && (

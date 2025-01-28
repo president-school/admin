@@ -47,7 +47,6 @@ export const Employees = () => {
   const filteredData = filter.filter((employee: ObjType) =>
     employee.full_name.toLowerCase().startsWith(searchValue.toLowerCase())
   );
-  console.log(testData);
 
   const sortData = filteredData.sort((a: any, b: any) => b.newDate - a.newDate);
 
@@ -56,6 +55,7 @@ export const Employees = () => {
     let index = Number(item.NewDate);
     newArray.splice(index - 1, 0, item);
   });
+  console.log(testData);
 
   return (
     <main className="w-full p-10">

@@ -1,7 +1,7 @@
 export interface ObjType {
   photo: string;
   full_name: string;
-  role: "worker" | "teacher";
+  role: "Worker" | "Teacher";
   id?: number | string;
   education_level: string;
   isTeacher?: boolean;
@@ -20,6 +20,7 @@ export interface EmployeesType {
   uz: ObjType;
   de: ObjType;
   en: ObjType;
+  role: string[];
 }
 
 export interface IEditEmployee {
@@ -115,6 +116,7 @@ export interface NewsData {
   description: string;
   videos: string;
   date: number;
+  role: string[];
 }
 
 export interface NewsResData {
@@ -122,4 +124,34 @@ export interface NewsResData {
   en: NewsData;
   de: NewsData;
   uz: NewsData;
+}
+
+export interface ObjType {
+  photo: string;
+  full_name: string;
+  role: "Worker" | "Teacher";
+  id?: number | string;
+  imgURL: string;
+  isTeacher?: boolean;
+  description?: string;
+  education?: string;
+  scientific_degree?: string;
+  admission_days?: string;
+  phone?: string | RegExp;
+  email?: string;
+  position: string;
+  number: string;
+}
+
+export interface IEditEmployee {
+  name?: string;
+  role?: string;
+  surname?: string;
+  id?: number | string;
+  img?: string;
+}
+
+export interface UserData {
+  email: string;
+  role: string;
 }
