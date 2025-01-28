@@ -20,6 +20,7 @@ import { filterFormValue } from "../../utils/mapdata";
 import InputMask from "react-input-mask";
 import { X } from "lucide-react";
 import { RcFile } from "antd/es/upload";
+import { deleteObject, getStorage, ref } from "firebase/storage";
 export const ModalForm = () => {
   const [fileList, setFileList] = useState<any[]>([]);
   const [isVisible, setIsVisible] = useState(false);
@@ -29,6 +30,7 @@ export const ModalForm = () => {
   const data = Date.now();
 
   const formModal = useSelector((state: RootState) => state.booleans.fromModal);
+  const userData = useSelector((state: RootState) => state.booleans.user);
   const { data: formData } = GetFirebaseDataById("employees", formModal.id);
 
   const {
@@ -44,6 +46,17 @@ export const ModalForm = () => {
   } = PostFirebaseData("employees");
   const [activeLang, setActiveLang] = useState<"uz" | "ru" | "en">("uz");
   const [photos, setPhotos] = useState<string>(formData?.uz?.photo);
+  const storage = getStorage();
+  const deletePhoto = async (path: string) => {
+    const fileRef = ref(storage, path);
+    setPhotos("");
+    try {
+      await deleteObject(fileRef); // Faylni o'chirish
+      console.log("File deleted successfully");
+    } catch (error) {
+      console.error("Error deleting file:", error);
+    }
+  };
 
   useEffect(() => {
     if (formModal.role === "edit") {
@@ -94,7 +107,7 @@ export const ModalForm = () => {
         role: dataInfo.role,
         scientific_degree: dataInfo.scientific_degree_uz,
         admission_days: dataInfo.admission_days_uz,
-        newDate: data,
+        newDate: formModal.role === "edit" ? formData.en.newDate : data,
       },
       de: {
         full_name: dataInfo.full_name_de,
@@ -109,7 +122,7 @@ export const ModalForm = () => {
         role: dataInfo.role,
         scientific_degree: dataInfo.scientific_degree_de,
         admission_days: dataInfo.admission_days_de,
-        newDate: data,
+        newDate: formModal.role === "edit" ? formData.en.newDate : data,
       },
       en: {
         full_name: dataInfo.full_name_en,
@@ -124,8 +137,9 @@ export const ModalForm = () => {
         role: dataInfo.role,
         scientific_degree: dataInfo.scientific_degree_en,
         admission_days: dataInfo.admission_days_en,
-        newDate: data,
+        newDate: formModal.role === "edit" ? formData.en.newDate : data,
       },
+      role: ["superAdmin", userData.role],
     };
     if (formModal.role === "add") {
       fetchingData(filterData);
@@ -284,7 +298,11 @@ export const ModalForm = () => {
               <Select.Option value={"Teacher"}>
                 {t("form.teacher")}
               </Select.Option>
-              <Select.Option value={"Worker"}>{t("form.worker")}</Select.Option>
+              {userData.role === "superAdmin" && (
+                <Select.Option value={"Worker"}>
+                  {t("form.worker")}
+                </Select.Option>
+              )}
             </Select>
           </Form.Item>
           <LanguageForm
@@ -361,7 +379,7 @@ export const ModalForm = () => {
                 {photos?.length > 0 && (
                   <span
                     className="w-5 h-5 bg-red-500 rounded-full absolute top-2 right-2 flex justify-center items-center text-white cursor-pointer"
-                    onClick={() => setPhotos("")}
+                    onClick={() => deletePhoto(photos)}
                   >
                     X
                   </span>

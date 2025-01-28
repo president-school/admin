@@ -1,4 +1,4 @@
-import { FieldType } from "../utils/types";
+import { FieldType, UserData } from "../utils/types";
 import { useNavigate } from "react-router-dom";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -7,13 +7,15 @@ import { ToastContainer } from "react-toastify";
 
 import { login } from "../firebase/auth";
 import { useState } from "react";
+import { setUserFun } from "../utils/dispatch";
 export const Login = () => {
   let navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const onSubmit = async (values: FieldType) => {
     try {
       setLoading(true);
-      await login(values.email, values.password);
+      const data: UserData = await login(values.email, values.password);
+      setUserFun(data);
       navigate("/");
     } catch (error) {
       message.error("Incorrect email or password");

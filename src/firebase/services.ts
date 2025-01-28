@@ -307,6 +307,7 @@ const convertTextToHtml = (input: string) => {
   html = html.replace(/➖/g, "<li>").replace(/✅/g, "<b>");
 
   html = html.replace(/Maktabga qabul:/, "<h3>Maktabga qabul:</h3>");
+  html = html.replace(/;/, "<br>");
 
   return `<div>${html}</div>`;
 };

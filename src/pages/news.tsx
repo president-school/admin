@@ -17,6 +17,7 @@ export const News = () => {
   const modalAction = useSelector(
     (state: RootState) => state.booleans.newsModal
   );
+
   useEffect(() => {
     if (modalAction.refresh) {
       refresh();
@@ -35,7 +36,6 @@ export const News = () => {
     news.title.toLowerCase().startsWith(searchValue.toLowerCase())
   );
   const sortData = filteredData.sort((a: any, b: any) => a.date - b.date);
-
 
   let newArray: NewsData[] = [];
   sortData.forEach((item) => {
@@ -85,15 +85,16 @@ export const News = () => {
             </div>
           )}
           {loading ||
-            filteredData.map((item) => (
+            filteredData.map((item, i) => (
               <NewsCard
                 key={item.id}
                 title={item.title}
                 description={item.description}
-                img={item.images ? item?.images[0] : ""}
+                img={item.images ? item?.images : ""}
                 id={item.id}
                 refresh={refresh}
                 path="news"
+                admin={item.role}
               />
             ))}
           {!loading && filteredData.length == 0 && (

@@ -4,6 +4,7 @@ import {
   FormModalType,
   langueType,
   NewsType,
+  UserData,
 } from "../utils/types";
 
 type State = {
@@ -17,6 +18,7 @@ type State = {
   newsModal: NewsType;
   acceptanceModal: AcceptanceModalAction;
   userEmail: string;
+  user: UserData;
 };
 const initialState: State = {
   fromModal: { id: "", open: false, role: "add", refresh: false, title: "" },
@@ -36,6 +38,7 @@ const initialState: State = {
   admin: localStorage?.getItem("userRole") || "",
   langue: localStorage?.getItem("langue") || "uz",
   userEmail: "",
+  user: { email: "", role: "" },
 };
 const booleansSlice = createSlice({
   name: "booleans",
@@ -75,6 +78,10 @@ const booleansSlice = createSlice({
     ) => {
       state.acceptanceModal = action.payload;
     },
+
+    setUser: (state, action: PayloadAction<UserData>) => {
+      state.user = action.payload;
+    },
   },
 });
 export const {
@@ -87,6 +94,7 @@ export const {
   setLangue,
   setNewsModal,
   setAcceptanceModal,
-  setUserEmail
+  setUserEmail,
+  setUser,
 } = booleansSlice.actions;
 export default booleansSlice.reducer;

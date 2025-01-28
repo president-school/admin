@@ -84,10 +84,11 @@ export const Achievements = () => {
                 key={item.id}
                 title={item.title}
                 description={item.description}
-                img={item.images ? item.images[0] : ""}
+                img={item.images ? item.images : ""}
                 id={item.id}
                 refresh={refresh}
                 path="achievements"
+                admin={item.role}
               />
             ))}
           {!loading && filteredData.length == 0 && (
