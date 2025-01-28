@@ -85,7 +85,7 @@ export const News = () => {
             </div>
           )}
           {loading ||
-            filteredData.map((item, i) => (
+            filteredData.map((item) => (
               <NewsCard
                 key={item.id}
                 title={item.title}

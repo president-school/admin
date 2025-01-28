@@ -5,7 +5,7 @@ import { AddNews } from "../components/shared/add-news";
 import { FormModal, Sidebar } from "../components/shared";
 import { AcceptanceEdit } from "../components/shared/acceptance-edit";
 
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { setUserFun } from "../utils/dispatch";
 import { UserData } from "../utils/types";
 export const Layout = () => {

@@ -137,7 +137,7 @@ export interface ObjType {
   education?: string;
   scientific_degree?: string;
   admission_days?: string;
-  phone?: string | RegExp;
+  // phone?: any | undefined;
   email?: string;
   position: string;
   number: string;
