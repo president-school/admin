@@ -11,18 +11,18 @@ export default function ConfirmationModal({
   isOpen,
   onClose,
   onConfirm,
-  employeeName,
+
 }: ConfirmationModalProps) {
   const { t } = useTranslation();
   if (!isOpen) return null;
   return (
     <div className="h-screen fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
         <h3 className="text-lg font-semibold mb-4">
           {t("employees.confirmation")}
         </h3>
         <p className="mb-6">
-          {t("employees.modalText")} {employeeName} {t("employees.modalText2")}
+          {/* {t("employees.delete")} */}
         </p>
         <div className="flex justify-end space-x-4">
           <button
